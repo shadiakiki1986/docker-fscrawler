@@ -33,6 +33,9 @@ after_script:
 
 # Copied from elasticsearch-docker/Makefile
 env:
+  matrix:
+    - FSCRAWLER_VER=2.1
+    - FSCRAWLER_VER=2.2
   global:
     - ELASTIC_VERSION=5.1.2
     - ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch
