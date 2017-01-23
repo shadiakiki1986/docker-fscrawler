@@ -18,9 +18,10 @@ script:
 
 # Copied from elasticsearch-docker/Makefile
 env:
-- ELASTIC_VERSION=5.1.2
-- ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch
-- ES_JAVA_OPTS=""
-- VERSIONED_IMAGE=docker.elastic.co/elasticsearch/elasticsearch:5.1.2
-- ELASTIC_REGISTRY=docker.elastic.co
-- BASEIMAGE=${ELASTIC_REGISTRY}/elasticsearch/elasticsearch-alpine-base:latest
+  global:
+    - ELASTIC_VERSION=5.1.2
+    - ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch
+    - ES_JAVA_OPTS=""
+    - VERSIONED_IMAGE=docker.elastic.co/elasticsearch/elasticsearch:5.1.2
+    - ELASTIC_REGISTRY=docker.elastic.co
+    - BASEIMAGE=${ELASTIC_REGISTRY}/elasticsearch/elasticsearch-alpine-base:latest
