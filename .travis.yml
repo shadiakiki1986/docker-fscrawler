@@ -8,7 +8,7 @@ before_install:
 # copied from elasticsearch-docker/Makefile, run-es-single step
 - cd elasticsearch-docker
   && docker pull ${BASEIMAGE}
-  && ES_NODE_COUNT=1 docker-compose -f docker-compose.yml -f docker-compose.hostports.yml up --build elasticsearch1
+  && ES_NODE_COUNT=1 docker-compose -f docker-compose.yml -f docker-compose.hostports.yml up -d --build elasticsearch1
 - docker build -t fscrawler .
 script:
 - docker run -it --rm --name my-fscrawler 
