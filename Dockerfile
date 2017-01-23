@@ -4,6 +4,8 @@ RUN  wget https://repo1.maven.org/maven2/fr/pilato/elasticsearch/crawler/fscrawl
   && unzip fscrawler-2.1.zip
 RUN mkdir ~/.fscrawler ~/files
 WORKDIR ./fscrawler-2.1
-ENTRYPOINT cp /data/fscrawler/home/* /root/.fscrawler -r \
+# sleep below to wait for elasticsearch to boot
+ENTRYPOINT sleep 10 \
+        && cp /data/fscrawler/home/* /root/.fscrawler -r \
         && cp /data/fscrawler/files/* /root/files -r \
         && bin/fscrawler --trace myjob

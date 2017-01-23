@@ -1,0 +1,13 @@
+version: '2'
+services:
+  fscrawler:
+    build:
+      context: ${PWD}
+    volumes:
+    - ${PWD}/test/data/:/data/fscrawler/files/:ro
+    - ${PWD}/test/config:/data/fscrawler/home/:ro
+    depends_on:
+    - elasticsearch1
+  elasticsearch1:
+    build:
+      context: ${PWD}/elasticsearch-docker/build/elasticsearch

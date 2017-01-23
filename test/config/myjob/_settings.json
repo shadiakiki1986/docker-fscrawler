@@ -10,7 +10,7 @@
     "index" : "docker-fscrawler",
     "type": "doc",
     "nodes" : [
-      { "host" : "localhost", "port" : 9200 }
+      { "host" : "elasticsearch1", "port" : 9200 }
     ]
   }
 }
