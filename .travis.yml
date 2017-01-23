@@ -4,12 +4,23 @@ services:
 before_install:
 - sudo sysctl -w vm.max_map_count=262144
 - git clone https://github.com/elastic/elasticsearch-docker
-  && cd elasticsearch-docker
-  && cp ../test/elasticsearch/elasticsearch.yml build/elasticsearch/
-  && make run-es-single
+  && cp test/elasticsearch/elasticsearch.yml elasticsearch-docker/build/elasticsearch/
+# copied from elasticsearch-docker/Makefile, run-es-single step
+- cd elasticsearch-docker
+  && docker pull ${BASEIMAGE}
+  && ES_NODE_COUNT=1 docker-compose -f docker-compose.yml -f docker-compose.hostports.yml up --build elasticsearch1
 - docker build -t fscrawler .
 script:
 - docker run -it --rm --name my-fscrawler 
   -v $PWD/data/:/data/fscrawler/files/:ro 
   -v $PWD/config:/data/fscrawler/home/:ro 
   fscrawler
+
+# Copied from elasticsearch-docker/Makefile
+env:
+- ELASTIC_VERSION=5.1.2
+- ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch
+- ES_JAVA_OPTS=""
+- VERSIONED_IMAGE=docker.elastic.co/elasticsearch/elasticsearch:5.1.2
+- ELASTIC_REGISTRY=docker.elastic.co
+- BASEIMAGE=${ELASTIC_REGISTRY}/elasticsearch/elasticsearch-alpine-base:latest
