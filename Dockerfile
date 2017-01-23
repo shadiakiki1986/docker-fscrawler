@@ -2,7 +2,7 @@ FROM openjdk:alpine
 RUN apk add --update openssl
 RUN mkdir ~/.fscrawler ~/files
 COPY install.sh .
-RUN install.sh
+RUN pwd && ls && /bin/sh install.sh
 WORKDIR /root/fscrawler
 # sleep below to wait for elasticsearch to boot
 ENTRYPOINT sleep 10 \
