@@ -20,8 +20,11 @@ script:
     exec fscrawler
     cat /root/.fscrawler/myjob/_status.json > test/actual_status.json
 - cat test/actual_status.json
-- cat test/actual_status.json |jq '.indexed'
 - test `cat test/actual_status.json |jq '.indexed'` -eq 1
+- docker-compose 
+    -f elasticsearch-docker/docker-compose.yml
+    -f docker-compose.yml
+    logs fscrawler
 after_script:
 - docker-compose
     -f elasticsearch-docker/docker-compose.yml
