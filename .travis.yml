@@ -1,9 +1,11 @@
+sudo: true
 services:
 - docker
 before_install:
-- sysctl -w vm.max_map_count=262144
+- sudo sysctl -w vm.max_map_count=262144
 - git clone https://github.com/elastic/elasticsearch-docker
   && cd elasticsearch-docker
+  && cp ../test/elasticsearch/elasticsearch.yml build/elasticsearch/
   && make run-es-single
 - docker build -t fscrawler .
 script:

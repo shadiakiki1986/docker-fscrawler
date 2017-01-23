@@ -15,12 +15,12 @@ where
 * *data folder* is the path to the folder with files to index
 * *config folder* is the path to the folder that will be mounted to `.fscrawler`
 
-For example, to run the demo files provided in this repo, run
+For example, to run the test files provided in this repo, run
 
 ```bash
 docker run -it --rm --name my-fscrawler \
-  -v $PWD/data/:/data/fscrawler/files/:ro \
-  -v $PWD/config:/data/fscrawler/home/:ro \
+  -v $PWD/test/data/:/data/fscrawler/files/:ro \
+  -v $PWD/test/config:/data/fscrawler/home/:ro \
   fscrawler
 ```
 
