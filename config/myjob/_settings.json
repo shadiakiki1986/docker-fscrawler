@@ -1,0 +1,16 @@
+{
+  "name" : "myjob",
+  "fs" : {
+    "url" : "/root/files",
+    "update_rate": "1m",
+    "store_source" : true,
+    "indexed_chars": "100%"
+  },
+  "elasticsearch" : {
+    "index" : "docker-fscrawler",
+    "type": "doc",
+    "nodes" : [
+      { "host" : "localhost", "port" : 9200 }
+    ]
+  }
+}
