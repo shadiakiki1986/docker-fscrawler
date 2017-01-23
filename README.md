@@ -4,14 +4,14 @@ Dockerfile for [fscrawler](https://github.com/dadoonet/fscrawler)
 The travis build is still WIP
 
 ## Usage
-The image is published on docker hub.
+The image is published on docker hub [here](https://hub.docker.com/r/shadiakiki1986/fscrawler/).
 
 To run it,
 ```bash
 docker run -it --rm --name my-fscrawler \
   -v < data folder   >:/data/fscrawler/files/:ro \
   -v < config folder >:/data/fscrawler/home/:ro \
-  fscrawler
+  shadiakiki1986/fscrawler
 ```
 where
 * *data folder* is the path to the folder with files to index
@@ -23,7 +23,7 @@ For example, to run the test files provided in this repo, run
 docker run -it --rm --name my-fscrawler \
   -v $PWD/test/data/:/data/fscrawler/files/:ro \
   -v $PWD/test/config:/data/fscrawler/home/:ro \
-  fscrawler
+  shadiakiki1986/fscrawler
 ```
 
 ## Building locally
