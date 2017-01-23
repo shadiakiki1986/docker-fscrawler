@@ -12,7 +12,7 @@ install:
     -f docker-compose.yml
     up -d --build
     elasticsearch1 fscrawler
-- sleep 20 # wait 10 seconds for elasticsearch to boot + 10 seconds for fscrawler to complete a round
+- sleep 25 # wait 10 seconds for elasticsearch to boot + 10 seconds for fscrawler to complete a round
 script:
 - docker-compose 
     -f elasticsearch-docker/docker-compose.yml

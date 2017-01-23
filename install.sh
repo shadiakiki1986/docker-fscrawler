@@ -1,5 +1,6 @@
 #!/bin/sh
 set -e
+echo "install.sh fscrawler=" $FSCRAWLER_VER
 if [ "$FSCRAWLER_VER" == "2.2" ]; then
   echo "install fscrawler 2.2"
   wget https://oss.sonatype.org/content/repositories/snapshots/fr/pilato/elasticsearch/crawler/fscrawler/2.2-SNAPSHOT/fscrawler-2.2-20170121.085715-101.zip

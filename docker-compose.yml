@@ -3,6 +3,8 @@ services:
   fscrawler:
     build:
       context: ${PWD}
+      args:
+        FSCRAWLER_VER: "${FSCRAWLER_VER}"
     volumes:
     - ${PWD}/test/data/:/data/fscrawler/files/:ro
     - ${PWD}/test/config:/data/fscrawler/home/:ro
