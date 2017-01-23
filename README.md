@@ -1,5 +1,7 @@
-# docker-fscrawler
+# docker-fscrawler [![Build Status](https://travis-ci.org/shadiakiki1986/docker-fscrawler.svg?branch=master)](https://travis-ci.org/shadiakiki1986/docker-fscrawler)
 Dockerfile for [fscrawler](https://github.com/dadoonet/fscrawler)
+
+The travis build is still WIP
 
 ## Usage
 The image is published on docker hub.
@@ -28,3 +30,4 @@ docker run -it --rm --name my-fscrawler \
   ```
   docker build -t fscrawler .
   ```
+
