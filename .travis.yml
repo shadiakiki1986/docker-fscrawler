@@ -38,6 +38,9 @@ script:
 - cat test/actual_status.json
 - test `cat test/actual_status.json |jq '.indexed'` -eq 1
 
+# show bulk_size in settings file and then check it in logs
+- cat /root/fscrawler/myjob/_settings.json
+
 # show logs for debugging
 - docker-compose 
     -f elasticsearch-docker/docker-compose.yml
@@ -46,6 +49,7 @@ script:
 
 # TODO: fails ATM, returning found=false
 # test that test.txt is indeed an ID since `filename_as_id: true` is used
+# https://github.com/dadoonet/fscrawler/issues/282
 - docker-compose
    -f elasticsearch-docker/docker-compose.yml
    -f docker-compose.yml
