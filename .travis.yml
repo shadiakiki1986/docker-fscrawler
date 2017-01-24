@@ -37,6 +37,7 @@ script:
 
 # show test.txt contents is not null and then check it in logs
 # https://github.com/dadoonet/fscrawler/issues/276
+# TODO: how to automate testing this?
 - docker-compose 
     -f elasticsearch-docker/docker-compose.yml
     -f docker-compose.yml
@@ -53,19 +54,21 @@ script:
 - test `cat test/actual_status.json |jq '.indexed'` -eq 1
 
 # show bulk_size in settings file and then check it in logs
-# TODO submit issue
+# https://github.com/dadoonet/fscrawler/issues/283
+# TODO: how to automate testing this?
 - docker-compose 
     -f elasticsearch-docker/docker-compose.yml
     -f docker-compose.yml
     exec fscrawler
     cat /root/.fscrawler/myjob/_settings.json
 
-# TODO: fails ATM, returning found=false
 # test that test.txt is indeed an ID since `filename_as_id: true` is used
 # https://github.com/dadoonet/fscrawler/issues/282
 #
 # Note 'jq' usage below to pretty-print
 # http://stackoverflow.com/a/15231463/4126114
+#
+# TODO: enable test line below when issue solved
 - docker-compose
    -f elasticsearch-docker/docker-compose.yml
    -f docker-compose.yml
