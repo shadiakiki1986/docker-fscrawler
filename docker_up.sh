@@ -8,24 +8,8 @@ docker-compose \
   up -d --build \
   elasticsearch1
 
-# Wait for elasticsearch1 to complete its 'up' sequence
-# Note that this section can be replaced with a simple "sleep 15"
-# but I grep for the end of its up because travis takes different time than locally on my machine
-#
-# Ref: Monitoring a file until a string is found
-# http://superuser.com/a/548193/642842
-echo "Wait for elasticsearch1 to complete its 'up' sequence"
-fifo=/tmp/tmpfifo.$$
-mkfifo "${fifo}" || exit 1
-docker-compose \
-  -f elasticsearch-docker/docker-compose.yml \
-  -f docker-compose.yml \
-  logs -f \
-  elasticsearch1 >${fifo} &
-tailpid=$! # optional
-grep -m 1 "\[RED\]" "${fifo}"
-kill "${tailpid}" # optional
-rm "${fifo}"
+echo "Wait for elasticsearch1 to complete its 'up' sequence (15 secs)"
+sleep 15
 
 # continue by up'ing fscrawler
 docker-compose \
@@ -35,5 +19,5 @@ docker-compose \
   fscrawler
 
 # Here I just sleep while fscrawler runs its first index
-echo "Wait for fscrawler for 10 seconds"
+echo "Wait for fscrawler to complete its first indexing (10 secs)"
 sleep 10

@@ -26,7 +26,7 @@ before_install:
 - docker pull ${BASEIMAGE}
 
 install:
-- docker_up.sh
+- ./docker_up.sh
 
 script:
 # Test that this run indexes at least 1
@@ -52,7 +52,8 @@ script:
    exec elasticsearch1
    curl -XGET http://elasticsearch1:9200/docker-fscrawler/doc/test.txt
    > test/actual_doc.json
-- cat test/actual_doc.json
+# pretty-print: http://stackoverflow.com/a/15231463/4126114
+- cat test/actual_doc.json | jq .
 #- test `cat test/actual_doc.json | jq '.found'` == "true"
 
 after_script:
