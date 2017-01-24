@@ -29,6 +29,20 @@ install:
 - ./docker_up.sh
 
 script:
+# show logs for debugging
+- docker-compose 
+    -f elasticsearch-docker/docker-compose.yml
+    -f docker-compose.yml
+    logs fscrawler
+
+# show test.txt contents is not null and then check it in logs
+# https://github.com/dadoonet/fscrawler/issues/276
+- docker-compose 
+    -f elasticsearch-docker/docker-compose.yml
+    -f docker-compose.yml
+    exec fscrawler
+    cat /root/files/test.txt
+
 # Test that this run indexes at least 1
 - docker-compose 
     -f elasticsearch-docker/docker-compose.yml
@@ -39,28 +53,25 @@ script:
 - test `cat test/actual_status.json |jq '.indexed'` -eq 1
 
 # show bulk_size in settings file and then check it in logs
+# TODO submit issue
 - docker-compose 
     -f elasticsearch-docker/docker-compose.yml
     -f docker-compose.yml
     exec fscrawler
-    cat /root/fscrawler/myjob/_settings.json
-
-# show logs for debugging
-- docker-compose 
-    -f elasticsearch-docker/docker-compose.yml
-    -f docker-compose.yml
-    logs fscrawler
+    cat /root/.fscrawler/myjob/_settings.json
 
 # TODO: fails ATM, returning found=false
 # test that test.txt is indeed an ID since `filename_as_id: true` is used
 # https://github.com/dadoonet/fscrawler/issues/282
+#
+# Note 'jq' usage below to pretty-print
+# http://stackoverflow.com/a/15231463/4126114
 - docker-compose
    -f elasticsearch-docker/docker-compose.yml
    -f docker-compose.yml
    exec elasticsearch1
    curl -XGET http://elasticsearch1:9200/docker-fscrawler/doc/test.txt
    > test/actual_doc.json
-# pretty-print: http://stackoverflow.com/a/15231463/4126114
 - cat test/actual_doc.json | jq .
 #- test `cat test/actual_doc.json | jq '.found'` == "true"
 
