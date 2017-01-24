@@ -10,6 +10,9 @@ services:
     - ${PWD}/test/config:/data/fscrawler/home/:ro
     depends_on:
     - elasticsearch1
+    env:
+    - FSCRAWLER_VER="${FSCRAWLER_VER}"
+
   elasticsearch1:
     build:
       context: ${PWD}/elasticsearch-docker/build/elasticsearch

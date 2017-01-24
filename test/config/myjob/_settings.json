@@ -12,6 +12,7 @@
     "type": "doc",
     "nodes" : [
       { "host" : "elasticsearch1", "port" : 9200 }
-    ]
+    ],
+    "bulksize": 100
   }
 }
