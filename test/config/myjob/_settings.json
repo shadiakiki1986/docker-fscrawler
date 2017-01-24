@@ -4,15 +4,14 @@
     "url" : "/root/files",
     "update_rate": "1m",
     "filename_as_id" : true,
-    "store_source" : true,
+    "index_content" : true,
     "indexed_chars": "100%"
   },
   "elasticsearch" : {
-    "index" : "docker-fscrawler",
-    "type": "doc",
     "nodes" : [
-      { "host" : "elasticsearch1", "port" : 9200 }
+      { "host" : "elasticsearch1", "port" : 9200, "scheme" : "HTTP" }
     ],
-    "bulksize": 100
+    "index" : "docker-fscrawler",
+    "type": "doc"
   }
 }
