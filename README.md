@@ -26,7 +26,7 @@ docker run -it --rm --name my-fscrawler \
   shadiakiki1986/fscrawler
 ```
 
-Note that this will install fscawler 2.1 by default. To install 2.2, run `export FSCRAWLER_VER=2.2` before `docker run`
+Note that this will install fscawler 2.1 by default. To install 2.2, use `docker run ... --build-args FSCRAWLER_VER=2.2 ...`
 
 ## Building locally
   ```
