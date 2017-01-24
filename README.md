@@ -1,8 +1,6 @@
 # docker-fscrawler [![Build Status](https://travis-ci.org/shadiakiki1986/docker-fscrawler.svg?branch=master)](https://travis-ci.org/shadiakiki1986/docker-fscrawler)
 Dockerfile for [fscrawler](https://github.com/dadoonet/fscrawler)
 
-The travis build is still WIP
-
 ## Usage
 The image is published on docker hub [here](https://hub.docker.com/r/shadiakiki1986/fscrawler/).
 
@@ -26,10 +24,12 @@ docker run -it --rm --name my-fscrawler \
   shadiakiki1986/fscrawler
 ```
 
-Note that this will install fscawler 2.1 by default. To install 2.2, use `docker run ... --build-args FSCRAWLER_VER=2.2 ...`
+Note that the publishd dockerfile uses fscawler 2.1 by default ATM.
+To install 2.2, build your own image as below
 
 ## Building locally
   ```
   docker build -t fscrawler .
   ```
 
+use `docker build ... --build-args FSCRAWLER_VER=2.2 ...` to build the image using fscrawler 2.2

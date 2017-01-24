@@ -3,6 +3,7 @@
   "fs" : {
     "url" : "/root/files",
     "update_rate": "1m",
+    "filename_as_id" : true,
     "store_source" : true,
     "indexed_chars": "100%"
   },
