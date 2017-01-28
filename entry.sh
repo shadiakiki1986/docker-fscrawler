@@ -1,14 +1,34 @@
-#!/bin/sh
+#!/bin/bash
+# copied from https://github.com/docker-library/elasticsearch/blob/f2e19796b765e2e448d0e8c651d51be992b56d08/5/alpine/docker-entrypoint.sh
 
 set -e
 
-cp /data/fscrawler/home/* /root/.fscrawler -r
-cp /data/fscrawler/files/* /root/files -r
-
-if [ "$FSCRAWLER_VER" == "2.2" ]; then
-  bin/fscrawler --trace --restart myjob
-else
-  # since --restart was only introduced in 2.2, resort to rm
-  rm -f ~/.fscrawler/myjob/_status.json
-  bin/fscrawler --trace myjob
+# Add fscrawler as command if needed
+# Note: The below just prefixes all the arguments with "fscrawler"
+# Ref
+# http://unix.stackexchange.com/questions/249869/meaning-of-101#249873
+# http://ss64.com/bash/set.html (search for --)
+if [ "${1:0:1}" = '-' ]; then
+  set -- fscrawler "$@"
 fi
+
+# Drop root privileges if we are running fscrawler
+# allow the container to be started with `--user`
+if [ "$1" = 'fscrawler' -a "$(id -u)" = '0' ]; then
+  # Change the ownership of user-mutable directories to fscrawler
+  for path in \
+    /usr/share/fscrawler/data \
+    /usr/share/fscrawler/config \
+    /usr/share/fscrawler/logs \
+  ; do
+    chown -R fscrawler:fscrawler "$path"
+  done
+  
+  set -- su-exec fscrawler "$@"
+  #exec su-exec fscrawler "$BASH_SOURCE" "$@"
+fi
+
+# As argument is not related to fscrawler,
+# then assume that user wants to run his own process,
+# for example a `bash` shell to explore this image
+exec "$@"

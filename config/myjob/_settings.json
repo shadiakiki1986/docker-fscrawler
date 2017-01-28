@@ -1,11 +1,9 @@
 {
   "name" : "myjob",
   "fs" : {
-    "url" : "/root/files",
-    "update_rate": "1m",
-    "filename_as_id" : true,
-    "index_content" : true,
-    "indexed_chars": "100%"
+    "url" : "/usr/share/fscrawler/data",
+    "update_rate": "15m",
+    "indexed_chars": "-1"
   },
   "elasticsearch" : {
     "nodes" : [
