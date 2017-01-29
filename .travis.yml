@@ -2,9 +2,6 @@ sudo: true
 services:
 - docker
 env:
-  matrix:
-    - FSCRAWLER_VER=2.1
-    - FSCRAWLER_VER=2.2
   global:
     # Copied from elasticsearch-docker/Makefile
     - ELASTIC_VERSION=5.1.2

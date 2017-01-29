@@ -21,8 +21,17 @@ where
 * *config folder* is the path to fscrawler's [config dir](https://github.com/dadoonet/fscrawler#cli-options)
 * *CLI options* are documented [here](https://github.com/dadoonet/fscrawler#cli-options)
 
-## Example 1
+## Example 1.1
 For example, to index the test files provided in this repo, with `loop=1` to run it only once
+
+```bash
+docker run -it --rm --name my-fscrawler \
+  -v $PWD/test/data/:/usr/share/fscrawler/data/:ro \
+  shadiakiki1986/fscrawler
+```
+
+## Example 2
+Same example above, but with `loop=1` to run it only once
 
 ```bash
 docker run -it --rm --name my-fscrawler \
@@ -31,11 +40,8 @@ docker run -it --rm --name my-fscrawler \
     --loop 1 --trace
 ```
 
-Note that the publishd dockerfile uses fscawler 2.1 by default ATM.
-To install 2.2, build your own image as below
-
-## Example 2
-For example, to override the config dir
+## Example 3
+To override the config dir
 
 ```bash
 docker run -it --rm --name my-fscrawler \
@@ -45,6 +51,6 @@ docker run -it --rm --name my-fscrawler \
 ```
 
 ## Building locally
-  ```
-  docker build -t fscrawler .
-  ```
+```
+docker build -t fscrawler .
+```
