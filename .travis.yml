@@ -39,14 +39,14 @@ script:
     -f elasticsearch-docker/docker-compose.yml
     -f docker-compose.yml
     exec fscrawler
-    cat /root/files/test.txt
+    cat /usr/share/fscrawler/data/test.txt
 
 # Test that this run indexes at least 1
 - docker-compose 
     -f elasticsearch-docker/docker-compose.yml
     -f docker-compose.yml
     exec fscrawler
-    cat /root/.fscrawler/myjob/_status.json > test/actual_status.json
+    cat /usr/share/fscrawler/config/myjob/_status.json > test/actual_status.json
 - cat test/actual_status.json
 - test `cat test/actual_status.json |jq '.indexed'` -eq 1
 
@@ -57,7 +57,7 @@ script:
     -f elasticsearch-docker/docker-compose.yml
     -f docker-compose.yml
     exec fscrawler
-    cat /root/.fscrawler/myjob/_settings.json
+    cat /usr/share/fscrawler/config/myjob/_settings.json
 
 # test that test.txt is indeed an ID since `filename_as_id: true` is used
 # https://github.com/dadoonet/fscrawler/issues/282
