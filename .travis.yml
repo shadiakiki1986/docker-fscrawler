@@ -21,6 +21,9 @@ before_install:
 - cp test/elasticsearch/elasticsearch.yml elasticsearch-docker/build/elasticsearch/
 # copied from elasticsearch-docker/Makefile, run-es-single step
 - docker pull ${BASEIMAGE}
+# download test files for OCR via tesseract
+- wget https://www.codeproject.com/KB/recipes/OCR-Chain-Code/image012.jpg -O test/data/image012.jpg
+- wget https://raw.githubusercontent.com/tesseract-ocr/docs/master/AT-1995.pdf -O test/data/AT-1995.pdf
 
 install:
 - ./docker_up.sh
@@ -70,10 +73,22 @@ script:
    -f elasticsearch-docker/docker-compose.yml
    -f docker-compose.yml
    exec elasticsearch1
-   curl -XGET http://elasticsearch1:9200/docker-fscrawler/doc/test.txt
-   > test/actual_doc.json
-- cat test/actual_doc.json | jq .
+   curl -XGET http://elasticsearch1:9200/docker-fscrawler/doc/test.txt?pretty
+#   > test/actual_doc.json
+#- cat test/actual_doc.json | jq .
 #- test `cat test/actual_doc.json | jq '.found'` == "true"
+
+# Check contents of OCR test files
+- docker-compose
+   -f elasticsearch-docker/docker-compose.yml
+   -f docker-compose.yml
+   exec elasticsearch1
+   curl -XGET http://elasticsearch1:9200/docker-fscrawler/doc/image012.jpg?pretty
+- docker-compose
+   -f elasticsearch-docker/docker-compose.yml
+   -f docker-compose.yml
+   exec elasticsearch1
+   curl -XGET http://elasticsearch1:9200/docker-fscrawler/doc/AT-1995.pdf?pretty
 
 after_script:
 - docker-compose
