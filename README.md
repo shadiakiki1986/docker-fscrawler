@@ -5,6 +5,8 @@ Mostly inspired by elasticsearch's alpine [dockerfile](https://github.com/docker
 
 Includes version `2.2-SNAPSHOT` (`20170124.163124`) of `fscrawler`
 
+and [tesseract](https://github.com/tesseract-ocr/tesseract/wiki) (via [alpine 3.5](https://pkgs.alpinelinux.org/packages?name=tesseract-ocr&branch=&repo=&arch=&maintainer=))
+
 ## Usage
 The image is published on docker hub [here](https://hub.docker.com/r/shadiakiki1986/fscrawler/).
 
