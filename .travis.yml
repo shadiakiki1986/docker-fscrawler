@@ -30,24 +30,17 @@ install:
 
 script:
 # show logs for debugging
-- docker-compose 
-    -f elasticsearch-docker/docker-compose.yml
-    -f docker-compose.yml
-    logs fscrawler
+- ./docker-compose-wrap.sh logs fscrawler
 
 # show test.txt contents is not null and then check it in logs
 # https://github.com/dadoonet/fscrawler/issues/276
 # TODO: how to automate testing this?
-- docker-compose 
-    -f elasticsearch-docker/docker-compose.yml
-    -f docker-compose.yml
+- ./docker-compose-wrap.sh
     exec fscrawler
     cat /usr/share/fscrawler/data/test.txt
 
 # Test that this run indexes at least 1
-- docker-compose 
-    -f elasticsearch-docker/docker-compose.yml
-    -f docker-compose.yml
+- ./docker-compose-wrap.sh
     exec fscrawler
     cat /usr/share/fscrawler/config/myjob/_status.json > test/actual_status.json
 - cat test/actual_status.json
@@ -56,9 +49,7 @@ script:
 # show bulk_size in settings file and then check it in logs
 # https://github.com/dadoonet/fscrawler/issues/283
 # TODO: how to automate testing this?
-- docker-compose 
-    -f elasticsearch-docker/docker-compose.yml
-    -f docker-compose.yml
+- ./docker-compose-wrap.sh
     exec fscrawler
     cat /usr/share/fscrawler/config/myjob/_settings.json
 
@@ -69,9 +60,7 @@ script:
 # http://stackoverflow.com/a/15231463/4126114
 #
 # TODO: enable test line below when issue solved
-- docker-compose
-   -f elasticsearch-docker/docker-compose.yml
-   -f docker-compose.yml
+- ./docker-compose-wrap.sh
    exec elasticsearch1
    curl -XGET http://elasticsearch1:9200/docker-fscrawler/doc/test.txt?pretty
 #   > test/actual_doc.json
@@ -79,19 +68,12 @@ script:
 #- test `cat test/actual_doc.json | jq '.found'` == "true"
 
 # Check contents of OCR test files
-- docker-compose
-   -f elasticsearch-docker/docker-compose.yml
-   -f docker-compose.yml
+- ./docker-compose-wrap.sh
    exec elasticsearch1
    curl -XGET http://elasticsearch1:9200/docker-fscrawler/doc/image012.jpg?pretty
-- docker-compose
-   -f elasticsearch-docker/docker-compose.yml
-   -f docker-compose.yml
+- ./docker-compose-wrap.sh
    exec elasticsearch1
    curl -XGET http://elasticsearch1:9200/docker-fscrawler/doc/AT-1995.pdf?pretty
 
 after_script:
-- docker-compose
-    -f elasticsearch-docker/docker-compose.yml
-    -f docker-compose.yml
-    down
+- ./docker-compose-wrap.sh down
