@@ -26,7 +26,7 @@ before_install:
 - wget https://raw.githubusercontent.com/tesseract-ocr/docs/master/AT-1995.pdf -O test/data/AT-1995.pdf
 
 install:
-- ./docker_up.sh
+- ./docker-compose-wrap.sh up --build -d elasticsearch1 fscrawler
 
 script:
 # show logs for debugging
