@@ -1,13 +1,25 @@
-version: '2'
+version: '2.1'
 services:
   fscrawler:
     build:
       context: ${PWD}
     volumes:
-    - ${PWD}/test/data/:/usr/share/fscrawler/data/
+    - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
     depends_on:
-    - elasticsearch1
+      elasticsearch1:
+        condition: service_healthy
+    command:
+      - --trace
+      - --config_dir
+      - /usr/share/fscrawler/config
+      - docker-compose
+    networks:
+      - esnet
 
   elasticsearch1:
     build:
       context: ${PWD}/elasticsearch-docker/build/elasticsearch
+    # Add healthcheck based on
+    # https://github.com/docker-library/healthcheck/blob/master/elasticsearch/docker-healthcheck
+    volumes:
+      - ${PWD}/healthcheck:/usr/share/healthcheck

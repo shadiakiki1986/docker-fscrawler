@@ -1,3 +1,4 @@
 [submodule "elasticsearch-docker"]
 	path = elasticsearch-docker
-	url = https://github.com/elastic/elasticsearch-docker
+	url = https://github.com/shadiakiki1986/elasticsearch-docker
+	branch = add_healthcheck

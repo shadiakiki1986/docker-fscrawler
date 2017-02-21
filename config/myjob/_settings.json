@@ -1,15 +1,6 @@
 {
   "name" : "myjob",
   "fs" : {
-    "url" : "/usr/share/fscrawler/data",
-    "update_rate": "15m",
-    "indexed_chars": "-1"
-  },
-  "elasticsearch" : {
-    "nodes" : [
-      { "host" : "elasticsearch1", "port" : 9200, "scheme" : "HTTP" }
-    ],
-    "index" : "docker-fscrawler",
-    "type": "doc"
+    "url" : "/usr/share/fscrawler/data"
   }
 }

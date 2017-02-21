@@ -24,16 +24,16 @@ RUN { \
 ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
 ENV PATH $PATH:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin
 
-ENV JAVA_VERSION 8u111
-#                                 v   changed this from original from r0 to r1
-#                                 v
-#                                 v
-#                                 v
-ENV JAVA_ALPINE_VERSION 8.111.14-r1
+#ENV JAVA_VERSION 8u111
+#ENV JAVA_ALPINE_VERSION 8.111.14-r0
+# changed the below openjdk from constraint:
+#    openjdk8 # ="$JAVA_ALPINE_VERSION" \
+# so that I don't need to worry about updating this with every repo update of alpine 3.5
+# Also commented out the unused env vars above
 
 RUN set -x \
-  && apk add --no-cache \
-    openjdk8="$JAVA_ALPINE_VERSION" \
+  && apk add --update --no-cache \
+       openjdk8 \
   && [ "$JAVA_HOME" = "$(docker-java-home)" ]
 ############################################################
 # Now that alpine 3.5 is installed, benefit by installing tesseract
@@ -54,9 +54,10 @@ WORKDIR /usr/share/fscrawler
 ENV PATH /usr/share/fscrawler/bin:$PATH
 
 ENV FSCRAWLER_VERSION 2.2
-# fscrawler-2.2-20170124.163124-131.zip
-ENV FSCRAWLER_ZIP="https://oss.sonatype.org/content/repositories/snapshots/fr/pilato/elasticsearch/crawler/fscrawler/2.2-SNAPSHOT/fscrawler-2.2-20170201.222335-154.zip"
+ENV FSCRAWLER_ZIP="https://repo1.maven.org/maven2/fr/pilato/elasticsearch/crawler/fscrawler/2.2/fscrawler-2.2.zip"
 
+# Remove logs path from below as it was just copy-pasted from elasticsearch
+# 		./logs \
 RUN set -ex; \
 	\
 	wget -O fscrawler.zip "$FSCRAWLER_ZIP"; \
@@ -66,18 +67,18 @@ RUN set -ex; \
 	\
 	for path in \
 		./data \
-		./logs \
 		./config \
 	; do \
 		mkdir -p "$path"; \
 		chown -R fscrawler:fscrawler "$path"; \
 	done;
 
-RUN mv fscrawler-2.2-SNAPSHOT/* .; \
-  rmdir fscrawler-2.2-SNAPSHOT;
+RUN mv fscrawler-2.2/* .; \
+  rmdir fscrawler-2.2;
 #RUN chown -R fscrawler:fscrawler .
 #USER fscrawler
 
+# copy default config
 COPY config ./config
 
 VOLUME /usr/share/fscrawler/data

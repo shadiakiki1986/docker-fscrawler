@@ -1,0 +1,13 @@
+{
+  "name" : "docker-compose",
+  "fs" : {
+    "url" : "/usr/share/fscrawler/data"
+  },
+  "elasticsearch" : {
+    "nodes" : [
+      { "host" : "elasticsearch1", "port" : 9200, "scheme" : "HTTP" }
+    ],
+    "index" : "docker-compose",
+    "type": "doc"
+  }
+}

@@ -16,10 +16,12 @@ fi
 # allow the container to be started with `--user`
 if [ "$1" = 'fscrawler' -a "$(id -u)" = '0' ]; then
   # Change the ownership of user-mutable directories to fscrawler
+  # remove from below the data folder since not user-mutable:
+  #  # /usr/share/fscrawler/data \
+  # remove the logs folder since unused in fscrawler (this was an elasticsearch thing, and just copy-pasted from their dockerfile entry script)
+  #  /usr/share/fscrawler/logs \
   for path in \
-    /usr/share/fscrawler/data \
     /usr/share/fscrawler/config \
-    /usr/share/fscrawler/logs \
   ; do
     chown -R fscrawler:fscrawler "$path"
   done
