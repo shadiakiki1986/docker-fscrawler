@@ -11,7 +11,11 @@ export VERSIONED_IMAGE="${ELASTIC_REGISTRY}/elasticsearch/elasticsearch:${ELASTI
 export BASEIMAGE="${ELASTIC_REGISTRY}/elasticsearch/elasticsearch-alpine-base:latest"
 export ES_NODE_COUNT="1"
 
+# Getting the source directory of a Bash script from within
+# http://stackoverflow.com/a/1482133/4126114
+BASEDIR=`dirname "$0"`
+
 docker-compose \
-  -f elasticsearch-docker/docker-compose.yml \
-  -f docker-compose.yml \
+  -f $BASEDIR/elasticsearch-docker/docker-compose.yml \
+  -f $BASEDIR/docker-compose.yml \
   $@
