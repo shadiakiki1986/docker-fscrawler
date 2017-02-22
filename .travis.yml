@@ -29,7 +29,7 @@ before_install:
 
 install:
 - ./docker-compose-wrap.sh up --build -d elasticsearch1 fscrawler
-- sleep 60 # wait for ES to boot up and fscrawler to run
+- echo "Sleeping for 60 seconds while ES boots up and fscrawler runs" && sleep 60
 
 script:
 # show logs for debugging
