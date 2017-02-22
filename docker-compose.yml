@@ -19,7 +19,3 @@ services:
   elasticsearch1:
     build:
       context: ${PWD}/elasticsearch-docker/build/elasticsearch
-    # Add healthcheck based on
-    # https://github.com/docker-library/healthcheck/blob/master/elasticsearch/docker-healthcheck
-    volumes:
-      - ${PWD}/healthcheck:/usr/share/healthcheck
