@@ -11,12 +11,14 @@ env:
     - VERSIONED_IMAGE=${ELASTIC_REGISTRY}/elasticsearch/elasticsearch:${ELASTIC_VERSION}
     - BASEIMAGE=${ELASTIC_REGISTRY}/elasticsearch/elasticsearch-alpine-base:latest
     - ES_NODE_COUNT=1
+
 addons:
   apt:
     packages:
       - jq
 
 before_install:
+- /bin/sh .travis.updateDocker.sh
 - sudo sysctl -w vm.max_map_count=262144
 - cp test/elasticsearch/elasticsearch.yml elasticsearch-docker/build/elasticsearch/
 # copied from elasticsearch-docker/Makefile, run-es-single step
@@ -27,6 +29,7 @@ before_install:
 
 install:
 - ./docker-compose-wrap.sh up --build -d elasticsearch1 fscrawler
+- sleep 60 # wait for ES to boot up and fscrawler to run
 
 script:
 # show logs for debugging
@@ -39,19 +42,19 @@ script:
     exec fscrawler
     cat /usr/share/fscrawler/data/test.txt
 
-# Test that this run indexes at least 1
+# Test that this run indexes all 3 files: test.txt, image012.jpg, AT-1995.pdf
 - ./docker-compose-wrap.sh
     exec fscrawler
-    cat /usr/share/fscrawler/config/myjob/_status.json > test/actual_status.json
+    cat /usr/share/fscrawler/config/docker-compose/_status.json > test/actual_status.json
 - cat test/actual_status.json
-- test `cat test/actual_status.json |jq '.indexed'` -eq 1
+- test `cat test/actual_status.json |jq '.indexed'` -eq 3
 
 # show bulk_size in settings file and then check it in logs
 # https://github.com/dadoonet/fscrawler/issues/283
 # TODO: how to automate testing this?
 - ./docker-compose-wrap.sh
     exec fscrawler
-    cat /usr/share/fscrawler/config/myjob/_settings.json
+    cat /usr/share/fscrawler/config/docker-compose/_settings.json
 
 # test that test.txt is indeed an ID since `filename_as_id: true` is used
 # https://github.com/dadoonet/fscrawler/issues/282
@@ -62,7 +65,7 @@ script:
 # TODO: enable test line below when issue solved
 - ./docker-compose-wrap.sh
    exec elasticsearch1
-   curl -XGET http://elasticsearch1:9200/docker-fscrawler/doc/test.txt?pretty
+   curl -XGET http://elasticsearch1:9200/docker-compose/doc/test.txt?pretty
 #   > test/actual_doc.json
 #- cat test/actual_doc.json | jq .
 #- test `cat test/actual_doc.json | jq '.found'` == "true"
@@ -70,10 +73,10 @@ script:
 # Check contents of OCR test files
 - ./docker-compose-wrap.sh
    exec elasticsearch1
-   curl -XGET http://elasticsearch1:9200/docker-fscrawler/doc/image012.jpg?pretty
+   curl -XGET http://elasticsearch1:9200/docker-compose/doc/image012.jpg?pretty
 - ./docker-compose-wrap.sh
    exec elasticsearch1
-   curl -XGET http://elasticsearch1:9200/docker-fscrawler/doc/AT-1995.pdf?pretty
+   curl -XGET http://elasticsearch1:9200/docker-compose/doc/AT-1995.pdf?pretty
 
 after_script:
 - ./docker-compose-wrap.sh down
