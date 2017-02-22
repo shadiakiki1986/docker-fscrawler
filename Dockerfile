@@ -38,6 +38,13 @@ RUN set -x \
 ############################################################
 # Now that alpine 3.5 is installed, benefit by installing tesseract
 RUN set -x && apk --update --no-cache add tesseract-ocr
+# Download training data
+# https://github.com/tesseract-ocr/tesseract/wiki#linux
+# I would have expected to need to download 3.04 traineddata
+# https://github.com/tesseract-ocr/tessdata/raw/3.04.00/eng.traineddata
+# but this seems to be working with the master version
+RUN set -x && apk --update --no-cache add openssl
+RUN wget https://github.com/tesseract-ocr/tessdata/raw/master/eng.traineddata -O /usr/share/tessdata/eng.traineddata
 
 #####################################################
 # Rest of file shamelessly copied (more or less) from the elasticsearch:alpine dockerfile
