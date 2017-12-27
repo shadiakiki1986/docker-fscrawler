@@ -60,8 +60,8 @@ RUN apk add --no-cache 'su-exec>=0.2' bash openssl
 WORKDIR /usr/share/fscrawler
 ENV PATH /usr/share/fscrawler/bin:$PATH
 
-ENV FSCRAWLER_VERSION 2.2
-ENV FSCRAWLER_ZIP="https://repo1.maven.org/maven2/fr/pilato/elasticsearch/crawler/fscrawler/2.2/fscrawler-2.2.zip"
+ENV FSCRAWLER_VERSION 2.4
+ENV FSCRAWLER_ZIP="https://repo1.maven.org/maven2/fr/pilato/elasticsearch/crawler/fscrawler/2.4/fscrawler-2.4.zip"
 
 # Remove logs path from below as it was just copy-pasted from elasticsearch
 # 		./logs \
@@ -80,8 +80,8 @@ RUN set -ex; \
 		chown -R fscrawler:fscrawler "$path"; \
 	done;
 
-RUN mv fscrawler-2.2/* .; \
-  rmdir fscrawler-2.2;
+RUN mv fscrawler-$FSCRAWLER_VERSION/* .; \
+  rmdir fscrawler-$FSCRAWLER_VERSION;
 #RUN chown -R fscrawler:fscrawler .
 #USER fscrawler
 

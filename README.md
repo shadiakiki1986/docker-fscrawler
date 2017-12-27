@@ -3,7 +3,7 @@ Dockerfile for [fscrawler](https://github.com/dadoonet/fscrawler)
 
 Mostly inspired by elasticsearch's alpine [dockerfile](https://github.com/docker-library/elasticsearch/blob/f2e19796b765e2e448d0e8c651d51be992b56d08/5/alpine/Dockerfile)
 
-Includes version `2.2` of `fscrawler`
+Includes version `2.4` of `fscrawler`
 
 and [tesseract](https://github.com/tesseract-ocr/tesseract/wiki) (via [alpine 3.5](https://pkgs.alpinelinux.org/packages?name=tesseract-ocr&branch=&repo=&arch=&maintainer=))
 
@@ -97,3 +97,17 @@ docker run -it --rm \
 ```
 docker build -t shadiakiki1986/fscrawler:local .
 ```
+
+## Updating
+To update `fscrawler` in this docker container:
+- update the version number used in `Dockerfile`
+  - also update the URL to the maven zip file to download
+- update the version number used on top of this README
+- try to build, e.g. `docker build -t shadiakiki1986/fscrawler:2.4`
+- try to run
+- commit, tag, push
+- the repo on hub.docker.com is an automatic build, so it will get updated with the `push` above
+
+## Changelog
+- Version 2.4 (2017-12-27): update fscrawler from 2.2 to 2.4
+- Version 2.2 (2016-??-??): use fscrawler 2.2
