@@ -103,7 +103,10 @@ To update `fscrawler` in this docker container:
 - try to build, e.g. `docker build -t shadiakiki1986/fscrawler:2.4`
 - try to run
 - commit, tag, push
-- the repo on hub.docker.com is an automatic build, so it will get updated with the `push` above
+
+To update the automated build on hub.docker.com
+- the "latest" tag will get re-built automatically with the `push` above
+- to add a new version tag, need to `build settings` and add it manually, then click `save` and `trigger`
 
 To update `elasticsearch` in the `docker-compose` for the purpose of testing (e.g. `.travis.yml`)
 - edit `build/elasticsearch/Dockerfile` by changing `FROM` image
