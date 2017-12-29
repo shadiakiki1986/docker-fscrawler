@@ -29,9 +29,19 @@ before_install:
 
 install:
 - ./docker-compose-wrap.sh up --build -d elasticsearch1 fscrawler
-- echo "Sleeping for 60 seconds while ES boots up and fscrawler runs" && sleep 60
+- echo "Sleeping while ES boots up and fscrawler runs" && sleep 180
 
 script:
+
+# Test that the sleep time was enough for fscrawler to complete
+# 1st test for log message
+# https://stackoverflow.com/a/27726913/4126114
+# 2nd test for existence of status file
+- echo "`./docker-compose-wrap.sh logs fscrawler | tail -n1`" | grep -q "Fs crawler is going to sleep"
+- ./docker-compose-wrap.sh
+    exec fscrawler
+    ls /usr/share/fscrawler/config/docker-compose/_status.json
+
 # Test that tesseract works
 - ./docker-compose-wrap.sh exec fscrawler tesseract -psm 3 /usr/share/fscrawler/data/image012.jpg /home/fscrawler/image012
 - ./docker-compose-wrap.sh exec fscrawler cat /home/fscrawler/image012.txt

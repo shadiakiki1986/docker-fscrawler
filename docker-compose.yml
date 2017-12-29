@@ -5,6 +5,7 @@ services:
       context: ${PWD}
     volumes:
     - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
+    - ${PWD}/config/docker-compose:/usr/share/fscrawler/config-mount/docker-compose
     depends_on:
       elasticsearch1:
         condition: service_healthy

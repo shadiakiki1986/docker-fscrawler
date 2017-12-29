@@ -7,6 +7,7 @@ Includes version `2.4` of `fscrawler`
 
 and [tesseract](https://github.com/tesseract-ocr/tesseract/wiki) (via [alpine 3.5](https://pkgs.alpinelinux.org/packages?name=tesseract-ocr&branch=&repo=&arch=&maintainer=))
 
+
 ## Usage
 The image is published on docker hub [here](https://hub.docker.com/r/shadiakiki1986/fscrawler/).
 
@@ -14,18 +15,16 @@ To run it against an elasticsearch instance served locally at port 9200,
 ```bash
 docker run -it --rm --name my-fscrawler \
   -v <data folder>:/usr/share/fscrawler/data/:ro \
-  -v <config folder>:/usr/share/fscrawler/config/ \
+  -v <config folder>:/usr/share/fscrawler/config-mount/<project-name>:ro \
   shadiakiki1986/fscrawler \
   [CLI options]
 ```
 where
 * *data folder* is the path to the folder with the files to index
-* *config folder* is the path to fscrawler's [config dir](https://github.com/dadoonet/fscrawler#cli-options)
-  * if this folder is not mounted from the host, the default config is the one in `config` in the github repository
-  * this folder cannot be mounted with `:ro`
-    * because the user permissions on it need to be changed in the dockerfile as it is user-mutable by fscrawler
-    * For a more detailed explanation of this docker volume permissions methodology, check http://stackoverflow.com/a/29799703/4126114
+* *config folder* is the path to the host fscrawler [config dir](https://github.com/dadoonet/fscrawler#cli-options)
+* if the config folder is not mounted from the host, the docker container will have an empty `config` folder, thus prompting the user for confirmation `Y/N` of creating the first project file
 * *CLI options* are documented [here](https://github.com/dadoonet/fscrawler#cli-options)
+
 
 ## Examples
 
@@ -46,7 +45,7 @@ sudo sysctl -w vm.max_map_count=262144
 ./docker-compose-wrap.sh run -p 9200:9200 -d elasticsearch1
 ```
 
-The `docker-compose` file version is `2.1`, tested with `docker-compose 1.11.1` and `docker 1.13.1`
+For the versions of the `docker-compose` file, `docker-compose`, and `docker`, check the [travis builds](https://travis-ci.org/shadiakiki1986/docker-fscrawler/)
 
 Notice that the docker-compose `fscrawler` service is wired to wait for a healthcheck in `elasticsearch`.
 In the case of a manual launch of elasticsearch:
@@ -54,6 +53,7 @@ In the case of a manual launch of elasticsearch:
 - or watch the logs,
 - or check `http://$host:9200/_cat/health?h=status`
 where you need to wait for `yellow` or `green`, depending on your application
+
 
 ### Example 2
 To index the test files provided in this repo
@@ -74,6 +74,7 @@ docker run -it --rm \
   --net="host" \
   --name my-fscrawler \
   -v $PWD/test/data/:/usr/share/fscrawler/data/:ro \
+  -v $PWD/config/myjob:/usr/share/fscrawler/config-mount/myjob:ro \
   shadiakiki1986/fscrawler \
     --config_dir /usr/share/fscrawler/config \
     --loop 1 \
@@ -81,24 +82,20 @@ docker run -it --rm \
     myjob
 ```
 
-### Example 4
-To override the config dir
-
-```bash
-docker run -it --rm \
-  --net="host" \
-  --name my-fscrawler \
-  -v $PWD/test/data/:/usr/share/fscrawler/data/:ro \
-  -v $PWD/config:/usr/share/fscrawler/config/ \
-  shadiakiki1986/fscrawler
-```
 
 ## Building locally
+
+To build the docker image
 ```
+git clone https://github.com/shadiakiki1986/docker-fscrawler
 docker build -t shadiakiki1986/fscrawler:local .
 ```
 
+To test against elasticsearch locally, follow steps in `.travis.yml`
+
+
 ## Updating
+
 To update `fscrawler` in this docker container:
 - update the version number used in `Dockerfile`
   - also update the URL to the maven zip file to download
@@ -108,6 +105,12 @@ To update `fscrawler` in this docker container:
 - commit, tag, push
 - the repo on hub.docker.com is an automatic build, so it will get updated with the `push` above
 
+
 ## Changelog
-- Version 2.4 (2017-12-27): update fscrawler from 2.2 to 2.4
-- Version 2.2 (2016-??-??): use fscrawler 2.2
+
+Version 2.4 (2017-12-27)
+- update fscrawler from 2.2 to 2.4
+- use `config-mount` for mounting config folder into fscrawler docker container
+
+Version 2.2 (2017-02-22)
+-  use fscrawler 2.2

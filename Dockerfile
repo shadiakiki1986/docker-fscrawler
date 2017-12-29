@@ -85,10 +85,9 @@ RUN mv fscrawler-$FSCRAWLER_VERSION/* .; \
 #RUN chown -R fscrawler:fscrawler .
 #USER fscrawler
 
-# copy default config
-COPY config ./config
-
 VOLUME /usr/share/fscrawler/data
+RUN mkdir /usr/share/fscrawler/config-mount \
+  && touch /usr/share/fscrawler/config-mount/empty
 
 COPY entry.sh /
 

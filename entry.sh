@@ -12,6 +12,10 @@ if [ "${1:0:1}" = '-' ]; then
   set -- fscrawler "$@"
 fi
 
+# copy files from config-mount to config
+# FIXME alternatively, could just copy _settings.json files, but this would require creating the folder structure of the projects
+cp -r /usr/share/fscrawler/config-mount/* /usr/share/fscrawler/config/
+
 # Drop root privileges if we are running fscrawler
 # allow the container to be started with `--user`
 if [ "$1" = 'fscrawler' -a "$(id -u)" = '0' ]; then
