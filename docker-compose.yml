@@ -6,6 +6,10 @@ services:
     volumes:
     - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
     - ${PWD}/config/docker-compose:/usr/share/fscrawler/config-mount/docker-compose
+
+    # Despite the python tester having a built-in healthcheck at tests/es_acceptance.py#wait_for_cluster_health
+    # Using the dockerfile healthcheck extends this to other services without having to re-code a wait for health status in each
+    # Note that this requires docker-compose.yml version 2.1, docker-compose>=1.11, docker>=1.13 
     depends_on:
       elasticsearch1:
         condition: service_healthy
@@ -14,9 +18,7 @@ services:
       - --config_dir
       - /usr/share/fscrawler/config
       - docker-compose
-    networks:
-      - esnet
 
   elasticsearch1:
     build:
-      context: ${PWD}/elasticsearch-docker/build/elasticsearch
+      context: ${PWD}/build/elasticsearch

@@ -1,16 +1,6 @@
 sudo: true
 services:
 - docker
-env:
-  global:
-    # Copied from elasticsearch-docker/Makefile
-    - ELASTIC_VERSION=5.1.2
-    - ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch
-    - ES_JAVA_OPTS=""
-    - ELASTIC_REGISTRY=docker.elastic.co
-    - VERSIONED_IMAGE=${ELASTIC_REGISTRY}/elasticsearch/elasticsearch:${ELASTIC_VERSION}
-    - BASEIMAGE=${ELASTIC_REGISTRY}/elasticsearch/elasticsearch-alpine-base:latest
-    - ES_NODE_COUNT=1
 
 addons:
   apt:
@@ -20,15 +10,14 @@ addons:
 before_install:
 - /bin/sh .travis.updateDocker.sh
 - sudo sysctl -w vm.max_map_count=262144
-- cp test/elasticsearch/elasticsearch.yml elasticsearch-docker/build/elasticsearch/
-# copied from elasticsearch-docker/Makefile, run-es-single step
-- docker pull ${BASEIMAGE}
+# No longer need to override the defaults to enable CORS
+# - cp test/elasticsearch/elasticsearch.yml elasticsearch-docker/build/elasticsearch/
 # download test files for OCR via tesseract
 - wget https://www.codeproject.com/KB/recipes/OCR-Chain-Code/image012.jpg -O test/data/image012.jpg
 - wget https://raw.githubusercontent.com/tesseract-ocr/docs/master/AT-1995.pdf -O test/data/AT-1995.pdf
 
 install:
-- ./docker-compose-wrap.sh up --build -d elasticsearch1 fscrawler
+- docker-compose up --build -d elasticsearch1 fscrawler
 - echo "Sleeping while ES boots up and fscrawler runs" && sleep 180
 
 script:
@@ -37,28 +26,25 @@ script:
 # 1st test for log message
 # https://stackoverflow.com/a/27726913/4126114
 # 2nd test for existence of status file
-- echo "`./docker-compose-wrap.sh logs fscrawler | tail -n1`" | grep -q "Fs crawler is going to sleep"
-- ./docker-compose-wrap.sh
+- echo "`docker-compose logs fscrawler | tail -n1`" | grep -q "Fs crawler is going to sleep"
+- docker-compose
     exec fscrawler
     ls /usr/share/fscrawler/config/docker-compose/_status.json
 
 # Test that tesseract works
-- ./docker-compose-wrap.sh exec fscrawler tesseract -psm 3 /usr/share/fscrawler/data/image012.jpg /home/fscrawler/image012
-- ./docker-compose-wrap.sh exec fscrawler cat /home/fscrawler/image012.txt
-- ./docker-compose-wrap.sh exec fscrawler grep ABCDE /home/fscrawler/image012.txt
-
-# show logs for debugging
-- ./docker-compose-wrap.sh logs fscrawler
+- docker-compose exec fscrawler tesseract -psm 3 /usr/share/fscrawler/data/image012.jpg /home/fscrawler/image012
+- docker-compose exec fscrawler cat /home/fscrawler/image012.txt
+- docker-compose exec fscrawler grep ABCDE /home/fscrawler/image012.txt
 
 # show test.txt contents is not null and then check it in logs
 # https://github.com/dadoonet/fscrawler/issues/276
 # TODO: how to automate testing this?
-- ./docker-compose-wrap.sh
+- docker-compose
     exec fscrawler
     cat /usr/share/fscrawler/data/test.txt
 
 # Test that this run indexes all 3 files: test.txt, image012.jpg, AT-1995.pdf
-- ./docker-compose-wrap.sh
+- docker-compose
     exec fscrawler
     cat /usr/share/fscrawler/config/docker-compose/_status.json > test/actual_status.json
 - cat test/actual_status.json
@@ -67,7 +53,7 @@ script:
 # show bulk_size in settings file and then check it in logs
 # https://github.com/dadoonet/fscrawler/issues/283
 # TODO: how to automate testing this?
-- ./docker-compose-wrap.sh
+- docker-compose
     exec fscrawler
     cat /usr/share/fscrawler/config/docker-compose/_settings.json
 
@@ -78,7 +64,7 @@ script:
 # http://stackoverflow.com/a/15231463/4126114
 #
 # TODO: enable test line below when issue solved
-- ./docker-compose-wrap.sh
+- docker-compose
    exec elasticsearch1
    curl -XGET http://elasticsearch1:9200/docker-compose/doc/test.txt?pretty
 #   > test/actual_doc.json
@@ -86,12 +72,18 @@ script:
 #- test `cat test/actual_doc.json | jq '.found'` == "true"
 
 # Check contents of OCR test files
-- ./docker-compose-wrap.sh
+- docker-compose
    exec elasticsearch1
    curl -XGET http://elasticsearch1:9200/docker-compose/doc/image012.jpg?pretty
-- ./docker-compose-wrap.sh
+- docker-compose
    exec elasticsearch1
    curl -XGET http://elasticsearch1:9200/docker-compose/doc/AT-1995.pdf?pretty
 
 after_script:
-- ./docker-compose-wrap.sh down
+- docker-compose down -v
+
+after_failure:
+# show logs for debugging
+- docker-compose logs elasticsearch1
+- docker-compose logs fscrawler
+

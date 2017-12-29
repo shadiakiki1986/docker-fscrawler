@@ -32,7 +32,7 @@ where
 Using `docker-compose`, startup elasticsearch and run fscrawler on files in `test/data` every 15 minutes:
 
 ```bash
-./docker-compose-wrap.sh up elasticsearch1 fscrawler
+docker-compose up elasticsearch1 fscrawler
 ```
 
 For the remaining examples, the default config depends on having a running elasticsearch instance on the localhost at port 9200.
@@ -42,7 +42,7 @@ Start one with:
 # [Ref](https://github.com/docker-library/elasticsearch/issues/111)
 sudo sysctl -w vm.max_map_count=262144
 
-./docker-compose-wrap.sh run -p 9200:9200 -d elasticsearch1
+docker-compose run -p 9200:9200 -d elasticsearch1
 ```
 
 For the versions of the `docker-compose` file, `docker-compose`, and `docker`, check the [travis builds](https://travis-ci.org/shadiakiki1986/docker-fscrawler/)
@@ -105,12 +105,24 @@ To update `fscrawler` in this docker container:
 - commit, tag, push
 - the repo on hub.docker.com is an automatic build, so it will get updated with the `push` above
 
+To update `elasticsearch` in the `docker-compose` for the purpose of testing (e.g. `.travis.yml`)
+- edit `build/elasticsearch/Dockerfile` by changing `FROM` image
+- follow steps in `.travis.yml`
+
 
 ## Changelog
 
 Version 2.4 (2017-12-27)
 - update fscrawler from 2.2 to 2.4
 - use `config-mount` for mounting config folder into fscrawler docker container
+- update elasticsearch service from 5.1.2 to 6.1.1
+  - elasticsearch 5.1.2 was not working with fscrawler 2.4 anyway because of https://github.com/dadoonet/fscrawler/issues/472
+- replace git submodule of my fork of elasticsearch-docker with just `build/elasticsearch/Dockerfile`
+  - the purpose of the fork was to push healthchecks into upstream, but my PR was rejected
+  - fork was at https://github.com/shadiakiki1986/elasticsearch-docker
+  - PR was at https://github.com/elastic/elasticsearch-docker/pull/27
+  - argumentation at https://github.com/elastic/elasticsearch-docker/issues/60
+  - proposed solution of just using docker-compose healthcheck would be too long in order to wait for "green" status
 
 Version 2.2 (2017-02-22)
 -  use fscrawler 2.2
