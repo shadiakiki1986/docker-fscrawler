@@ -1,3 +1,6 @@
 .*.swp
 test/actual_doc.json
 eng.traineddata
+config/docker-compose/_settings_cloud.json
+test/data/AT-1995.pdf
+test/data/image012.jpg

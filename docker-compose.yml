@@ -1,4 +1,9 @@
+# Even though latest ATM is 3,
+# sticking wtih 2.1 for the "condition" in "depends_on"
+# It was deprecated in version 3
+# Check https://docs.docker.com/compose/startup-order/
 version: '2.1'
+
 services:
   fscrawler:
     build:
@@ -11,6 +16,9 @@ services:
     # Using the dockerfile healthcheck extends this to other services without having to re-code a wait for health status in each
     # Note that this requires docker-compose.yml version 2.1, docker-compose>=1.11, docker>=1.13 
     depends_on:
+      # Should be es_init here, but not sure why fscrawler fails to detect it has executed
+      # This "depends_on.condition" syntax is deprecated anyway, so not thinking it through
+      # es_init:
       elasticsearch1:
         condition: service_healthy
     command:
@@ -22,3 +30,14 @@ services:
   elasticsearch1:
     build:
       context: ${PWD}/build/elasticsearch
+
+  # worker service that uploads example pipeline
+  es_init:
+    build:
+      context: ${PWD}/build/es_init/
+    depends_on:
+      elasticsearch1:
+        condition: service_healthy
+    environment:
+      - ES_URL=http://elasticsearch1:9200
+

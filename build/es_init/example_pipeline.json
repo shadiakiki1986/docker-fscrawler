@@ -1,0 +1,11 @@
+{
+  "description" : "fscrawler pipeline",
+  "processors" : [
+    {
+      "set" : {
+        "field": "foo",
+        "value": "bar"
+      }
+    }
+  ]
+}
