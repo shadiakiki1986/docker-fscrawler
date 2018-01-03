@@ -5,6 +5,7 @@
 version: '2.1'
 
 services:
+
   fscrawler:
     build:
       context: ${PWD}
@@ -30,6 +31,8 @@ services:
   elasticsearch1:
     build:
       context: ${PWD}/build/elasticsearch
+    volumes:
+    - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
 
   # worker service that uploads example pipeline
   es_init:
@@ -41,3 +44,24 @@ services:
     environment:
       - ES_URL=http://elasticsearch1:9200
 
+
+  # cannot name service with underscores
+  # https://github.com/dadoonet/fscrawler/issues/474
+  fscrawlerrest:
+    build:
+      context: ${PWD}
+    volumes:
+    - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
+    - ${PWD}/config/fscrawler_rest:/usr/share/fscrawler/config-mount/fscrawler_rest
+    # check note above in fscrawler.depends_on
+    depends_on:
+      elasticsearch1:
+        condition: service_healthy
+    command:
+      - --trace
+      - --config_dir
+      - /usr/share/fscrawler/config
+      - --loop
+      - "0"
+      - --rest
+      - fscrawler_rest

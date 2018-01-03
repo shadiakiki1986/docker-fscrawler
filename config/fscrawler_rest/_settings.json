@@ -1,0 +1,17 @@
+{
+  "name" : "fscrawler_rest",
+  "elasticsearch" : {
+    "nodes" : [
+      { "host" : "elasticsearch1", "port" : 9200, "scheme" : "HTTP" }
+    ],
+    "index" : "fscrawler_rest",
+    "pipeline": "example_pipeline",
+    "type": "doc"
+  },
+  "rest" : {
+    "scheme" : "HTTP",
+    "host" : "0.0.0.0",
+    "port" : 8080,
+    "endpoint" : ""
+  }
+}

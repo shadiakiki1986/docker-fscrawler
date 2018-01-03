@@ -90,13 +90,32 @@ script:
   curl -fsSL http://elasticsearch1:9200/_ingest/pipeline/example_pipeline?pretty
 
 # test that fscrawler used the pipeline
+# https://github.com/dadoonet/fscrawler/#using-ingest-node-pipeline
 - docker-compose
    exec elasticsearch1
    curl -XGET http://elasticsearch1:9200/docker-compose/doc/test.txt?pretty
    > test/actual_doc_4.json
 - cat test/actual_doc_4.json | jq .
 - test `cat test/actual_doc_4.json | jq '.found'` == "true"
-- test `cat test/actual_doc_4.json | jq '._source.foo'` == "bar"
+- test `cat test/actual_doc_4.json | jq -r '._source.foo'` == "bar"
+
+# test uploading a file through the REST API
+# https://github.com/dadoonet/fscrawler/#uploading-a-binary-document
+- docker-compose exec elasticsearch1
+  curl -F "file=@/usr/share/fscrawler/data/test2.txt" "http://fscrawlerrest:8080/_upload"
+   > test/actual_doc_5.json
+- cat test/actual_doc_5.json | jq .
+- test `cat test/actual_doc_5.json | jq '.ok'` == "true"
+
+# test that uploaded file through REST also gets ingest pipeline
+# Note cannot just use filename as ID
+- docker-compose
+   exec elasticsearch1
+   curl -XGET `cat test/actual_doc_5.json | jq -r '.url'`?pretty
+   > test/actual_doc_6.json
+- cat test/actual_doc_6.json | jq .
+- test `cat test/actual_doc_6.json | jq '.found'` == "true"
+- test `cat test/actual_doc_6.json | jq -r '._source.foo'` == "bar"
 
 after_script:
 - docker-compose down -v
