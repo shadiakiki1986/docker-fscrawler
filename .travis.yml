@@ -102,7 +102,7 @@ script:
 # test uploading a file through the REST API
 # https://github.com/dadoonet/fscrawler/#uploading-a-binary-document
 - docker-compose exec elasticsearch1
-  curl -F "file=@/usr/share/fscrawler/data/test2.txt" "http://fscrawlerrest:8080/_upload"
+  curl -F "file=@/usr/share/fscrawler/data/test.txt" "http://fscrawlerrest:8080/_upload"
    > test/actual_doc_5.json
 - cat test/actual_doc_5.json | jq .
 - test `cat test/actual_doc_5.json | jq '.ok'` == "true"
