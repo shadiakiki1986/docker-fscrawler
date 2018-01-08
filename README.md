@@ -3,7 +3,10 @@ Dockerfile for [fscrawler](https://github.com/dadoonet/fscrawler)
 
 Mostly inspired by elasticsearch's alpine [dockerfile](https://github.com/docker-library/elasticsearch/blob/f2e19796b765e2e448d0e8c651d51be992b56d08/5/alpine/Dockerfile)
 
-Git tags of this repository match version numbers of `fscrawler`, e.g. tag `2.4 is for version `2.4` of `fscrawler`. The same applies for the hub.docker.com published images
+Supported tags
+- `2.2` with fscrawler version 2.2 and alpine 3.5
+- `2.4` with fscrawler 2.4 and alpine 3.5
+- `ubuntu-2.5-SNAPSHOT` with fscrawler `2.5-SNAPSHOT` and ubuntu 16.04 (built from dockerfile in `ubuntu` folder)
 
 Dockerfile includes [tesseract](https://github.com/tesseract-ocr/tesseract/wiki) (via [alpine 3.5](https://pkgs.alpinelinux.org/packages?name=tesseract-ocr&branch=&repo=&arch=&maintainer=))
 

@@ -8,7 +8,10 @@ services:
 
   fscrawler:
     build:
-      context: ${PWD}
+      # alpine
+      # context: ${PWD}
+      # ubuntu
+      context: ${PWD}/ubuntu
     volumes:
     - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
     - ${PWD}/config/docker-compose:/usr/share/fscrawler/config-mount/docker-compose
@@ -54,7 +57,11 @@ services:
   # https://github.com/dadoonet/fscrawler/issues/474
   fscrawlerrest:
     build:
-      context: ${PWD}
+      # alpine
+      # context: ${PWD}
+      # ubuntu
+      context: ${PWD}/ubuntu
+
     volumes:
     - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
     - ${PWD}/config/fscrawler_rest:/usr/share/fscrawler/config-mount/fscrawler_rest
