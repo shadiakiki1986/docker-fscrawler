@@ -9,13 +9,20 @@ RUN update-ca-certificates -f
 
 WORKDIR /runtime
 
-RUN wget https://github.com/dadoonet/fscrawler/archive/master.zip
-RUN unzip master.zip
-RUN cd fscrawler-master && mvn compile
+# Until issue fscrawler/461 is closed via PR 475 (in fscrawler 2.5)
+# Use my own fork/branch
+# https://github.com/dadoonet/fscrawler/pull/475
+# ENV FS_BRANCH=master
+# ENV FS_UPSTREAM=dadoonet
+ENV FS_BRANCH=issue_461_rest_pipeline
+ENV FS_UPSTREAM=shadiakiki1986
+RUN wget https://github.com/$FS_UPSTREAM/fscrawler/archive/$FS_BRANCH.zip
+RUN unzip $FS_BRANCH.zip
+# RUN cd fscrawler-$FS_BRANCH && mvn compile
+WORKDIR /runtime/fscrawler-$FS_BRANCH
 
 # Modified original from here on
 # Copied from Dockerfile
-WORKDIR /runtime/fscrawler-master
 ENV FSCRAWLER_VERSION=2.5-SNAPSHOT
 RUN mvn clean install -X -DskipTests
 RUN mkdir /usr/share/fscrawler \
