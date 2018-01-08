@@ -6,7 +6,7 @@ Mostly inspired by elasticsearch's alpine [dockerfile](https://github.com/docker
 Supported tags
 - `2.2` with fscrawler version 2.2 and alpine 3.5
 - `2.4` with fscrawler 2.4 and alpine 3.5
-- `ubuntu-2.5-SNAPSHOT` with fscrawler `2.5-SNAPSHOT` and ubuntu 16.04 (built from dockerfile in `ubuntu` folder)
+- `2.5-SNAPSHOT-ubuntu` with fscrawler `2.5-SNAPSHOT` and ubuntu 16.04 (built from dockerfile in `ubuntu` folder)
 
 Dockerfile includes [tesseract](https://github.com/tesseract-ocr/tesseract/wiki) (via [alpine 3.5](https://pkgs.alpinelinux.org/packages?name=tesseract-ocr&branch=&repo=&arch=&maintainer=))
 
