@@ -3,9 +3,9 @@ Dockerfile for [fscrawler](https://github.com/dadoonet/fscrawler)
 
 Mostly inspired by elasticsearch's alpine [dockerfile](https://github.com/docker-library/elasticsearch/blob/f2e19796b765e2e448d0e8c651d51be992b56d08/5/alpine/Dockerfile)
 
-Includes version `2.4` of `fscrawler`
+Git tags of this repository match version numbers of `fscrawler`, e.g. tag `2.4 is for version `2.4` of `fscrawler`. The same applies for the hub.docker.com published images
 
-and [tesseract](https://github.com/tesseract-ocr/tesseract/wiki) (via [alpine 3.5](https://pkgs.alpinelinux.org/packages?name=tesseract-ocr&branch=&repo=&arch=&maintainer=))
+Dockerfile includes [tesseract](https://github.com/tesseract-ocr/tesseract/wiki) (via [alpine 3.5](https://pkgs.alpinelinux.org/packages?name=tesseract-ocr&branch=&repo=&arch=&maintainer=))
 
 
 ## Usage
@@ -99,8 +99,7 @@ To test against elasticsearch locally, follow steps in `.travis.yml`
 To update `fscrawler` in this docker container:
 - update the version number used in `Dockerfile`
   - also update the URL to the maven zip file to download
-- update the version number used on top of this README
-- try to build, e.g. `docker build -t shadiakiki1986/fscrawler:2.4`
+- try to build, e.g. `docker build -t shadiakiki1986/fscrawler:2.4 .`
 - try to run
 - commit, tag, push
 

@@ -60,8 +60,13 @@ RUN apk add --no-cache 'su-exec>=0.2' bash openssl
 WORKDIR /usr/share/fscrawler
 ENV PATH /usr/share/fscrawler/bin:$PATH
 
-ENV FSCRAWLER_VERSION 2.4
-ENV FSCRAWLER_ZIP="https://repo1.maven.org/maven2/fr/pilato/elasticsearch/crawler/fscrawler/2.4/fscrawler-2.4.zip"
+# for versions released on Maven Central
+# ENV FSCRAWLER_VERSION 2.4
+# ENV FSCRAWLER_ZIP="https://repo1.maven.org/maven2/fr/pilato/elasticsearch/crawler/fscrawler/2.4/fscrawler-2.4.zip"
+
+# for versions snapshotted on sonatype
+ENV FSCRAWLER_VERSION 2.5-SNAPSHOT
+ENV FSCRAWLER_ZIP="https://oss.sonatype.org/content/repositories/snapshots/fr/pilato/elasticsearch/crawler/fscrawler/2.5-SNAPSHOT/fscrawler-2.5-20171027.095913-3.zip"
 
 # Remove logs path from below as it was just copy-pasted from elasticsearch
 # 		./logs \

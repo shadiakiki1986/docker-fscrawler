@@ -31,6 +31,11 @@ services:
   elasticsearch1:
     build:
       context: ${PWD}/build/elasticsearch
+
+  # service that serves .travis.yml to make curl calls to elasticsearch1 and fscrawler
+  tester:
+    build:
+      context: ${PWD}/build/tester/
     volumes:
     - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
 
