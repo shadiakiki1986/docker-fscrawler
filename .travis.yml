@@ -18,7 +18,11 @@ before_install:
 
 install:
 - docker-compose up --build -d
-- echo "Sleeping while ES boots up and fscrawler runs" && sleep 180
+- echo "Sleeping while ES boots up, Tike font cache is built, and fscrawler runs" && sleep 60
+- ( docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep some more" && sleep 60 )
+- ( docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep even more" && sleep 60 )
+- ( docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep alot more" && sleep 60 )
+- ( docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep last more" && sleep 60 )
 
 script:
 # In below, note 'jq' usage below to pretty-print
@@ -28,7 +32,7 @@ script:
 # 1st test for log message
 # https://stackoverflow.com/a/27726913/4126114
 # 2nd test for existence of status file
-- echo "`docker-compose logs fscrawler | tail -n1`" | grep -q "Fs crawler is going to sleep"
+- docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep"
 - docker-compose
     exec fscrawler
     ls /usr/share/fscrawler/config/docker-compose/_status.json
