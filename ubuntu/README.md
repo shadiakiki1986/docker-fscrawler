@@ -9,5 +9,5 @@ Main differences
 Build
 ```
 cd docker-fscrawler
-docker build -t shadiakiki1986/fscrawler:ubuntu-2.5-SNAPSHOT ubuntu
+docker build -t shadiakiki1986/fscrawler:2.5-SNAPSHOT-ubuntu ubuntu
 ```
