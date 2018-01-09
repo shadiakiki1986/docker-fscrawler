@@ -24,7 +24,7 @@ WORKDIR /runtime/fscrawler-$FS_BRANCH
 # Modified original from here on
 # Copied from Dockerfile
 ENV FSCRAWLER_VERSION=2.5-SNAPSHOT
-RUN mvn clean install -X -DskipTests
+RUN mvn clean install -X -DskipTests > /dev/null
 RUN mkdir /usr/share/fscrawler \
  && cp target/fscrawler-$FSCRAWLER_VERSION.zip /usr/share/fscrawler/fscrawler.zip
 
