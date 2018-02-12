@@ -3,8 +3,14 @@
 
 FROM ubuntu:16.04
 
-RUN apt-get update && apt-get install -y openjdk-8-jdk wget unzip maven
-RUN apt-get install -y tesseract-ocr-fra tesseract-ocr
+# split each package to a separate line just for bandwidth purposes while running in FFA
+RUN apt-get update && apt-get install -y openjdk-8-jdk
+RUN apt-get update && apt-get install -y wget
+RUN apt-get update && apt-get install -y unzip
+RUN apt-get update && apt-get install -y maven
+RUN apt-get update && apt-get install -y tesseract-ocr
+RUN apt-get update && apt-get install -y tesseract-ocr-fra
+
 RUN update-ca-certificates -f
 
 WORKDIR /runtime
