@@ -19,8 +19,8 @@ Probably a good idea to get the alpine image to work.
 The image is published on docker hub [here](https://hub.docker.com/r/shadiakiki1986/fscrawler/).
 
 Docker-fscrawler can only be used in coordination with an elasticsearch docker container. Elasticsearch instances 
-running on the host machine are not visible to the container. To make coordination between the ES and fscrawler
- containers easy, it is recommended to use docker-compose, as described here.
+running natively on the host machine are not visible to docker-fscrawler. To make coordination between the ES and
+fscrawler containers easy, it is recommended to use docker-compose, as described here.
  
 Make sure you have set up `vm.max_map_count=262144` by either putting it in `/etc/sysctl.conf` and 
 running `sudo sysctl -p`, or whatever other means is convenient to you. This is necessary for elasticsearch. (see 
@@ -29,7 +29,7 @@ running `sudo sysctl -p`, or whatever other means is convenient to you. This is 
 
 #### Download
 
-Download the following files from the git repository. Cloning the whole repository it _not_ necessary.
+Download the following files from this git repository. Cloning the whole repository it _not_ necessary.
 
 `docker-compose-deployment.yml`   
 `build/elasticsearch/docker-healthcheck`
@@ -106,13 +106,14 @@ If you see all your documents here, you should be good to go!
 If you don't see all your documents, use the following command to get more detailed logs. 
 
 ```bash
-docker-compose run fscrawler --config_dir /usr/share/fscrawler/config fscrawler_job --debug
+docker-compose run fscrawler --config_dir /usr/share/fscrawler/config fscrawler_job --restart --debug
 ```
 
 Hopefully these logs will make it clear what went wrong. Failing that you can use 
-`--trace` instead of `--debug` for even more detailed logs.
+`--trace` instead of `--debug` for even more detailed logs. You can also use `--restart` whenever you want to re-index 
+everything (otherwise files are only reindexed when they are touched).
 
-Additional options for `docker-compose run fscrawler` commands can be found 
+Additional options for `docker-compose run fscrawler` can be found 
 [here](https://github.com/dadoonet/fscrawler#cli-options).
 
 
