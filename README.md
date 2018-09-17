@@ -15,25 +15,109 @@ It said that `initial heap size larger than max heap size` and I couldn't figure
 The alpine image was 308 MB, whereas the ubuntu image is 1.2 GB (but also includes tesseract-fra).
 Probably a good idea to get the alpine image to work.
 
-## Usage
+## Usage Instructions
 The image is published on docker hub [here](https://hub.docker.com/r/shadiakiki1986/fscrawler/).
 
-To run it against an elasticsearch instance served locally at port 9200,
+Docker-fscrawler can only be used in coordination with an elasticsearch docker container. Elasticsearch instances 
+running natively on the host machine are not visible to docker-fscrawler. To make coordination between the ES and
+fscrawler containers easy, it is recommended to use docker-compose, as described here.
+ 
+Make sure you have set up `vm.max_map_count=262144` by either putting it in `/etc/sysctl.conf` and 
+running `sudo sysctl -p`, or whatever other means is convenient to you. This is necessary for elasticsearch. (see 
+[Ref](https://github.com/docker-library/elasticsearch/issues/111))
+
+
+#### Download
+
+Download the following files from this git repository. Cloning the whole repository it _not_ necessary.
+
+`docker-compose-deployment.yml`   
+`build/elasticsearch/docker-healthcheck`
+ 
+Make a new empty folder and put these two files in it. This directory will be the home of your configurations, and the 
+location from which you can control your containers and make changes.
+ 
+ Change the name of `docker-compose-deployment.yml` to `docker-compose.yml`.
+
+
+###### Optional: Configure Containers
+
+* Make a file here called `.env`. Here you can configure the docker containers.
+* Add the line `TARGET_DIR=/path/to/directory/you/want/to/index`. If you don't add this line, it will default to `./data/`
+* Add the line `JOB_NAME=name_to_give_your_index`. This will be the name of the fscrawler job and the ES index. 
+If you don't add this line, it will default to fscrawler_job.
+
+#### Configure fscrawler
+
+Now run
+
 ```bash
-docker run -it --rm --name my-fscrawler \
-  -v <data folder>:/usr/share/fscrawler/data/:ro \
-  -v <config folder>:/usr/share/fscrawler/config-mount/<project-name>:ro \
-  shadiakiki1986/fscrawler \
-  [CLI options]
+docker-compose run fscrawler
 ```
-where
-* *data folder* is the path to the folder with the files to index
-* *config folder* is the path to the host fscrawler [config dir](https://github.com/dadoonet/fscrawler#cli-options)
-* if the config folder is not mounted from the host, the docker container will have an empty `config` folder, thus prompting the user for confirmation `Y/N` of creating the first project file
-* *CLI options* are documented [here](https://github.com/dadoonet/fscrawler#cli-options)
+
+Respond with `Y` to the question of whether to create a new config.
+
+Edit the newly created `config/fscrawler_job/_settings.json` file (you may need to use sudo, the folder name may be 
+different if you are using `.env`). Change elasticsearch.nodes from `127.0.0.1` to
+`elasticsearch1`, so that it reads follows. 
+
+```json
+...
+  "elasticsearch" : {
+    "nodes" : [ {
+      "host" : "elasticsearch1",
+      "port" : 9200,
+      "scheme" : "HTTP"
+    } ],
+    "bulk_size" : 100,
+    "flush_interval" : "5s"
+  },
+...
+```
+
+For the rest of the settings in this file, can choose your own based on 
+[the options documented here](https://fscrawler.readthedocs.io/en/latest/admin/fs/local-fs.html#). Do not change fs.url 
+unless you also change the corresponding line in `docker-compose.yml`, or else fscrawler won't be able to find your 
+files.
 
 
-## Examples
+#### Test
+
+Populate `data/` or the directory you specified in `.env` with some files you would like to index.
+
+Run the following.
+
+```bash
+docker-compose up -d elasticsearch1 elasticsearch2
+docker-compose up -d fscrawler
+```
+
+fscrawler should then upload the test files you put in `data/`. To check that all is well, 
+query the elasticsearch over http (substitute fscrawler_job if you gave it your own name in `.env`)
+
+```bash
+curl http://localhost:9200/fscrawler_job/_search | jq
+```
+
+If you see all your documents here, you should be good to go!
+
+#### Troubleshooting
+
+If you don't see all your documents, use the following command to get more detailed logs. 
+
+```bash
+docker-compose run fscrawler --config_dir /usr/share/fscrawler/config fscrawler_job --restart --debug
+```
+
+Hopefully these logs will make it clear what went wrong. Failing that you can use 
+`--trace` instead of `--debug` for even more detailed logs. You can also use `--restart` whenever you want to re-index 
+everything (otherwise files are only reindexed when they are touched).
+
+Additional options for `docker-compose run fscrawler` can be found 
+[here](https://github.com/dadoonet/fscrawler#cli-options).
+
+
+## Additional Usage Examples
 
 ### Example 1
 Using `docker-compose`, startup elasticsearch and run fscrawler on files in `test/data` every 15 minutes:
