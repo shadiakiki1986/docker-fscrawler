@@ -18,8 +18,26 @@ Probably a good idea to get the alpine image to work.
 ## Usage Instructions
 The image is published on docker hub [here](https://hub.docker.com/r/shadiakiki1986/fscrawler/).
 
-Docker-fscrawler can only be used in coordination with an elasticsearch docker container. Elasticsearch instances 
-running natively on the host machine are not visible to docker-fscrawler. To make coordination between the ES and
+### stand-alone docker
+To run it against an elasticsearch instance served locally at port 9200,
+```bash
+docker run -it --rm --name my-fscrawler \
+  -v <data folder>:/usr/share/fscrawler/data/:ro \
+  -v <config folder>:/usr/share/fscrawler/config-mount/<project-name>:ro \
+  shadiakiki1986/fscrawler \
+  [CLI options]
+```
+where
+* *data folder* is the path to the folder with the files to index
+* *config folder* is the path to the host fscrawler [config dir](https://github.com/dadoonet/fscrawler#cli-options)
+  * make sure to use the proper URL reference in the config file to point to `localhost:9200` if elasticsearch is running locally
+* if the config folder is not mounted from the host, the docker container will have an empty `config` folder, thus prompting the user for confirmation `Y/N` of creating the first project file
+* *CLI options* are documented [here](https://github.com/dadoonet/fscrawler#cli-options)
+
+
+### with docker-compose
+
+Docker-fscrawler can be used in coordination with an elasticsearch docker container or an elasticsearch instance running natively on the host machine. To make coordination between the ES and
 fscrawler containers easy, it is recommended to use docker-compose, as described here.
  
 Make sure you have set up `vm.max_map_count=262144` by either putting it in `/etc/sysctl.conf` and 
