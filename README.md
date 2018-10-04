@@ -198,7 +198,7 @@ docker run -it --rm \
 To build the docker image
 ```
 git clone https://github.com/shadiakiki1986/docker-fscrawler
-docker build -t shadiakiki1986/fscrawler:local .
+docker build -t shadiakiki1986/fscrawler:local . # or use version instead of "local"
 ```
 
 To test against elasticsearch locally, follow steps in `.travis.yml`
@@ -223,6 +223,10 @@ To update `elasticsearch` in the `docker-compose` for the purpose of testing (e.
 
 
 ## Changelog
+
+Version 2.5.0 (2018-10-04)
+- using fscrawler 2.5
+
 
 Version 2.4.2 (2018-10-04)
 - change the main base image to be ubuntu instead of alpine linux
