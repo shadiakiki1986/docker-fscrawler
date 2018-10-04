@@ -30,7 +30,7 @@ if [ "$1" = 'fscrawler' -a "$(id -u)" = '0' ]; then
     chown -R fscrawler:fscrawler "$path"
   done
   
-  set -- gosu fscrawler "$@"
+  set -- su-exec fscrawler "$@"
   #exec su-exec fscrawler "$BASH_SOURCE" "$@"
 fi
 

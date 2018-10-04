@@ -223,6 +223,12 @@ To update `elasticsearch` in the `docker-compose` for the purpose of testing (e.
 
 ## Changelog
 
+Version 2.4.2 (2018-10-04)
+- change the main base image to be ubuntu instead of alpine linux
+  - move the alpine linux image into a "alpine" folder
+  - move teh ubuntu linux image out of the "ubuntu" folder
+
+
 Version 2.4 (2017-12-27)
 - update fscrawler from 2.2 to 2.4
 - use `config-mount` for mounting config folder into fscrawler docker container
