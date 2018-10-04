@@ -1,6 +1,8 @@
 # docker-fscrawler [![Build Status](https://travis-ci.org/shadiakiki1986/docker-fscrawler.svg?branch=master)](https://travis-ci.org/shadiakiki1986/docker-fscrawler)
 Dockerfile for [fscrawler](https://github.com/dadoonet/fscrawler)
 
+Published on docker hub [here](https://hub.docker.com/r/shadiakiki1986/fscrawler/).
+
 Mostly inspired by elasticsearch's alpine [dockerfile](https://github.com/docker-library/elasticsearch/blob/f2e19796b765e2e448d0e8c651d51be992b56d08/5/alpine/Dockerfile)
 
 Supported tags
@@ -16,7 +18,6 @@ The alpine image was 308 MB, whereas the ubuntu image is 1.2 GB (but also includ
 Probably a good idea to get the alpine image to work.
 
 ## Usage Instructions
-The image is published on docker hub [here](https://hub.docker.com/r/shadiakiki1986/fscrawler/).
 
 ### stand-alone docker
 To run it against an elasticsearch instance served locally at port 9200,
