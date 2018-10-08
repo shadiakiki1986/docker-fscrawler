@@ -19,8 +19,8 @@ WORKDIR /runtime
 # Use my own fork/branch
 # https://github.com/dadoonet/fscrawler/pull/475
 # Edit 2018-10-04 PR was merged, so move back to upstream
-# ENV FS_BRANCH=master
-ENV FS_BRANCH=fscrawler-2.5
+ENV FS_BRANCH=master
+# ENV FS_BRANCH=fscrawler-2.5
 ENV FS_UPSTREAM=dadoonet
 # ENV FS_BRANCH=issue_461_rest_pipeline
 # ENV FS_UPSTREAM=shadiakiki1986
@@ -33,8 +33,8 @@ WORKDIR /runtime/fscrawler-$FS_BRANCH
 # Copied from Dockerfile
 # usually same as FSCRAWLER_BRANCH
 # ENV FSCRAWLER_VERSION=2.5-SNAPSHOT
-ENV FSCRAWLER_VERSION=2.5
-# ENV FSCRAWLER_VERSION=2.6-SNAPSHOT
+# ENV FSCRAWLER_VERSION=2.5
+ENV FSCRAWLER_VERSION=2.6-SNAPSHOT
 
 # build
 # RUN mvn clean install -X -DskipTests # > /dev/null

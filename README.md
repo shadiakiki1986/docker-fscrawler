@@ -255,6 +255,10 @@ To update `elasticsearch` in the `docker-compose` for the purpose of testing (e.
 
 ## Changelog
 
+Version 2.6-SNAPSHOT (2018-10-08)
+- update fscrawler from 2.5 to `2.6-SNAPSHOT` (master branch as of today)
+
+
 Version 2.5.2 (2018-10-08)
 - docker-compose.yml updates
   - update base elasticsearch image to be `6.4` from 6.1
