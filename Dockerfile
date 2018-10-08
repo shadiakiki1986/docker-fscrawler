@@ -50,9 +50,18 @@ RUN addgroup --system fscrawler && adduser --system --ingroup fscrawler fscrawle
 # and bash for "bin/fscrawler" among others
 RUN apt-get update && apt-get install -y gosu bash openssl
 
+# Now cp and unzip the generated zip file from the maven build above
+# usually same as FSCRAWLER_BRANCH
+ENV FSCRAWLER_VERSION=2.5
+RUN cp /runtime/fscrawler-$FS_BRANCH/distribution/target/fscrawler-$FSCRAWLER_VERSION.zip ./fscrawler.zip
+
+
 # Remove logs path from below as it was just copy-pasted from elasticsearch
 # 		./logs \
 RUN set -ex; \
+  \
+  unzip fscrawler.zip; \
+  rm fscrawler.zip; \
 	\
 	for path in \
 		./data \
@@ -62,10 +71,10 @@ RUN set -ex; \
 		chown -R fscrawler:fscrawler "$path"; \
 	done;
 
-# usually same as FSCRAWLER_BRANCH
-ENV FSCRAWLER_VERSION=fscrawler-2.5
 # shopt from https://unix.stackexchange.com/a/6397/312018
-RUN /bin/bash -c "shopt -s dotglob nullglob; mv /runtime/fscrawler-$FSCRAWLER_VERSION/* .; ls -al /runtime/fscrawler-$FSCRAWLER_VERSION; rmdir /runtime/fscrawler-$FSCRAWLER_VERSION;"
+# RUN /bin/bash -c "shopt -s dotglob nullglob; mv /runtime/fscrawler-$FSCRAWLER_VERSION/* .; ls -al /runtime/fscrawler-$FSCRAWLER_VERSION; rmdir /runtime/fscrawler-$FSCRAWLER_VERSION;"
+RUN mv fscrawler-$FSCRAWLER_VERSION/* .; \
+  rmdir fscrawler-$FSCRAWLER_VERSION;
 
 #RUN chown -R fscrawler:fscrawler .
 #USER fscrawler

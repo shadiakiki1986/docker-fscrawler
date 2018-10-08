@@ -6,30 +6,31 @@ version: '2.1'
 
 services:
 
-  fscrawler:
-    build:
-      # alpine
-      # context: ${PWD}
-      # ubuntu
-      context: ${PWD}/ubuntu
-    volumes:
-    - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
-    - ${PWD}/config/docker-compose:/usr/share/fscrawler/config-mount/docker-compose
+  # Deprecated service in favor of "fscrawlerrest"
+  # fscrawler:
+  #   build:
+  #     # ubuntu as base image
+  #     context: ${PWD}
+  #     # alpine linux as base image
+  #     # context: ${PWD}/alpine
+  #   volumes:
+  #   - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
+  #   - ${PWD}/config/docker-compose:/usr/share/fscrawler/config-mount/docker-compose
 
-    # Despite the python tester having a built-in healthcheck at tests/es_acceptance.py#wait_for_cluster_health
-    # Using the dockerfile healthcheck extends this to other services without having to re-code a wait for health status in each
-    # Note that this requires docker-compose.yml version 2.1, docker-compose>=1.11, docker>=1.13 
-    depends_on:
-      # Should be es_init here, but not sure why fscrawler fails to detect it has executed
-      # This "depends_on.condition" syntax is deprecated anyway, so not thinking it through
-      # es_init:
-      elasticsearch1:
-        condition: service_healthy
-    command:
-      - --trace
-      - --config_dir
-      - /usr/share/fscrawler/config
-      - docker-compose
+  #   # Despite the python tester having a built-in healthcheck at tests/es_acceptance.py#wait_for_cluster_health
+  #   # Using the dockerfile healthcheck extends this to other services without having to re-code a wait for health status in each
+  #   # Note that this requires docker-compose.yml version 2.1, docker-compose>=1.11, docker>=1.13 
+  #   depends_on:
+  #     # Should be es_init here, but not sure why fscrawler fails to detect it has executed
+  #     # This "depends_on.condition" syntax is deprecated anyway, so not thinking it through
+  #     # es_init:
+  #     elasticsearch1:
+  #       condition: service_healthy
+  #   command:
+  #     - --trace
+  #     - --config_dir
+  #     - /usr/share/fscrawler/config
+  #     - docker-compose
 
   elasticsearch1:
     build:
@@ -57,10 +58,9 @@ services:
   # https://github.com/dadoonet/fscrawler/issues/474
   fscrawlerrest:
     build:
+      context: ${PWD}
       # alpine
-      # context: ${PWD}
-      # ubuntu
-      context: ${PWD}/ubuntu
+      # context: ${PWD}/alpine
 
     volumes:
     - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
@@ -69,6 +69,8 @@ services:
     depends_on:
       elasticsearch1:
         condition: service_healthy
+    ports:
+      - "8890:8080"
     command:
       - --trace
       - --config_dir

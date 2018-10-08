@@ -8,35 +8,58 @@ Mostly inspired by elasticsearch's alpine [dockerfile](https://github.com/docker
 Supported tags
 - `2.2` with fscrawler version 2.2 and alpine 3.5
 - `2.4` with fscrawler 2.4 and alpine 3.5
-- `2.5-SNAPSHOT-ubuntu` with fscrawler `2.5-SNAPSHOT` and ubuntu 16.04 (built from dockerfile in `ubuntu` folder)
+- `2.5` with fscrawler 2.5 and ubuntu 16.04
 
-Dockerfile includes [tesseract](https://github.com/tesseract-ocr/tesseract/wiki) (via [alpine 3.5](https://pkgs.alpinelinux.org/packages?name=tesseract-ocr&branch=&repo=&arch=&maintainer=))
+Dockerfile includes [tesseract](https://github.com/tesseract-ocr/tesseract/wiki) (via ubuntu 16.04 or via [alpine 3.5](https://pkgs.alpinelinux.org/packages?name=tesseract-ocr&branch=&repo=&arch=&maintainer=))
 
 PS: The Ubuntu image was added because the alpine image was giving an error upon `mvn clean install`
 It said that `initial heap size larger than max heap size` and I couldn't figure it out.
 The alpine image was 308 MB, whereas the ubuntu image is 1.2 GB (but also includes tesseract-fra).
 Probably a good idea to get the alpine image to work.
 
+
 ## Usage Instructions
 
 ### stand-alone docker
-To run it against an elasticsearch instance served locally at port 9200,
-```bash
-docker run -it --rm --name my-fscrawler \
+
+Given you have good docker-fu skills,
+to run fscrawler docker image in `folder indexing mode`:
+
+```
+docker run \
+  -it --rm --name my-fscrawler \
   -v <data folder>:/usr/share/fscrawler/data/:ro \
   -v <config folder>:/usr/share/fscrawler/config-mount/<project-name>:ro \
   shadiakiki1986/fscrawler \
   [CLI options]
 ```
+
 where
 * *data folder* is the path to the folder with the files to index
 * *config folder* is the path to the host fscrawler [config dir](https://github.com/dadoonet/fscrawler#cli-options)
-  * make sure to use the proper URL reference in the config file to point to `localhost:9200` if elasticsearch is running locally
+  * make sure to use the proper URL reference in the config file to point to the elasticsearch instance
+    * e.g. `localhost:9200` if elasticsearch is running locally
 * if the config folder is not mounted from the host, the docker container will have an empty `config` folder, thus prompting the user for confirmation `Y/N` of creating the first project file
 * *CLI options* are documented [here](https://github.com/dadoonet/fscrawler#cli-options)
 
 
-### with docker-compose
+An example set of `CLI options` is to run fscrawler in REST API mode:
+
+```
+docker run \
+  ...
+  -p <local port>:8080
+  shadiakiki1986/fscrawler \
+  --loop "0" --reset fscrawler_rest
+```
+
+
+### with docker-compose (file 1)
+
+Given you already have good docker-compose-fu skills, check `docker-compose.yml`.
+
+
+### with docker-compose (file 2)
 
 Docker-fscrawler can be used in coordination with an elasticsearch docker container or an elasticsearch instance running natively on the host machine. To make coordination between the ES and
 fscrawler containers easy, it is recommended to use docker-compose, as described here.
@@ -48,7 +71,7 @@ running `sudo sysctl -p`, or whatever other means is convenient to you. This is 
 
 #### Download
 
-Download the following files from this git repository. Cloning the whole repository it _not_ necessary.
+Download the following files from this git repository. Cloning the whole repository is _not_ necessary.
 
 `docker-compose-deployment.yml`   
 `build/elasticsearch/docker-healthcheck`
@@ -56,7 +79,7 @@ Download the following files from this git repository. Cloning the whole reposit
 Make a new empty folder and put these two files in it. This directory will be the home of your configurations, and the 
 location from which you can control your containers and make changes.
  
- Change the name of `docker-compose-deployment.yml` to `docker-compose.yml`.
+Change the name of `docker-compose-deployment.yml` to `docker-compose.yml`.
 
 
 ###### Optional: Configure Containers
@@ -64,7 +87,7 @@ location from which you can control your containers and make changes.
 * Make a file here called `.env`. Here you can configure the docker containers.
 * Add the line `TARGET_DIR=/path/to/directory/you/want/to/index`. If you don't add this line, it will default to `./data/`
 * Add the line `JOB_NAME=name_to_give_your_index`. This will be the name of the fscrawler job and the ES index. 
-If you don't add this line, it will default to fscrawler_job.
+If you don't add this line, it will default to `fscrawler_job`.
 
 #### Configure fscrawler
 
@@ -224,7 +247,7 @@ To update `elasticsearch` in the `docker-compose` for the purpose of testing (e.
 
 ## Changelog
 
-Version 2.5.0 (2018-10-04)
+Version 2.5.1 (2018-10-08)
 - using fscrawler 2.5
 
 
