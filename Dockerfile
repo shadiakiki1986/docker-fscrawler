@@ -19,7 +19,8 @@ WORKDIR /runtime
 # Use my own fork/branch
 # https://github.com/dadoonet/fscrawler/pull/475
 # Edit 2018-10-04 PR was merged, so move back to upstream
-ENV FS_BRANCH=master
+# ENV FS_BRANCH=master
+ENV FS_BRANCH=fscrawler-2.5
 ENV FS_UPSTREAM=dadoonet
 # ENV FS_BRANCH=issue_461_rest_pipeline
 # ENV FS_UPSTREAM=shadiakiki1986
@@ -32,9 +33,11 @@ WORKDIR /runtime/fscrawler-$FS_BRANCH
 # Copied from Dockerfile
 # ENV FSCRAWLER_VERSION=2.5-SNAPSHOT
 ENV FSCRAWLER_VERSION=2.5
-RUN mvn clean install -X -DskipTests # > /dev/null
-RUN mkdir /usr/share/fscrawler \
- && cp target/fscrawler-$FSCRAWLER_VERSION.zip /usr/share/fscrawler/fscrawler.zip
+# RUN mvn clean install -X -DskipTests # > /dev/null
+RUN mvn clean package -DskipTests # > /dev/null
+
+# FSCRAWLER_VERSION is same as FS_BRANCH
+RUN mkdir /usr/share/fscrawler
 
 # continue
 WORKDIR /usr/share/fscrawler
@@ -51,9 +54,6 @@ RUN apt-get update && apt-get install -y gosu bash openssl
 # 		./logs \
 RUN set -ex; \
 	\
-	unzip fscrawler.zip; \
-	rm fscrawler.zip; \
-	\
 	for path in \
 		./data \
 		./config \
@@ -62,8 +62,11 @@ RUN set -ex; \
 		chown -R fscrawler:fscrawler "$path"; \
 	done;
 
-RUN mv fscrawler-$FSCRAWLER_VERSION/* .; \
-  rmdir fscrawler-$FSCRAWLER_VERSION;
+# usually same as FSCRAWLER_BRANCH
+ENV FSCRAWLER_VERSION=fscrawler-2.5
+# shopt from https://unix.stackexchange.com/a/6397/312018
+RUN /bin/bash -c "shopt -s dotglob nullglob; mv /runtime/fscrawler-$FSCRAWLER_VERSION/* .; ls -al /runtime/fscrawler-$FSCRAWLER_VERSION; rmdir /runtime/fscrawler-$FSCRAWLER_VERSION;"
+
 #RUN chown -R fscrawler:fscrawler .
 #USER fscrawler
 
