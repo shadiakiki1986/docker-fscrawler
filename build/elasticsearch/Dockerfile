@@ -21,7 +21,7 @@ FROM docker.elastic.co/elasticsearch/elasticsearch:6.4.0
 # Reference: https://docs.docker.com/engine/reference/builder/#/healthcheck 
 #
 # 2017-xx-xx TODO How to detect that 2 nodes are running and wait for "green"?
-# Edit 2018-10-08 it seems that elasticsearch 6.4 now shows "green" even if 1 node, so changing target below from yellow to green
+# Edit 2018-10-08 it seems that elasticsearch 6.4 now shows "green" even if 1 node,
+# so added to the healthcheck script a check that the "minimum" requirement is yellow
 COPY docker-healthcheck /usr/local/bin/
-# HEALTHCHECK CMD ["/bin/bash","docker-healthcheck","yellow"] 
-HEALTHCHECK CMD ["/bin/bash","docker-healthcheck","green"] 
+HEALTHCHECK CMD ["/bin/bash","docker-healthcheck","yellow"] 

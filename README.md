@@ -259,7 +259,7 @@ Version 2.5.2 (2018-10-08)
 - docker-compose.yml updates
   - update base elasticsearch image to be `6.4` from 6.1
   - bring back the file crawl service
-  - elasticsearch healthcheck to target green now that 6.4 shows green instead of yellow even if 1 node
+  - elasticsearch healthcheck to target yellow as a "minimum" now that 6.4 shows green instead of yellow even if 1 node
 
 
 Version 2.5.1 (2018-10-08)
