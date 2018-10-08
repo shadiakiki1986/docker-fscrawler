@@ -6,34 +6,38 @@ version: '2.1'
 
 services:
 
-  # Deprecated service in favor of "fscrawlerrest"
-  # fscrawler:
-  #   build:
-  #     # ubuntu as base image
-  #     context: ${PWD}
-  #     # alpine linux as base image
-  #     # context: ${PWD}/alpine
-  #   volumes:
-  #   - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
-  #   - ${PWD}/config/docker-compose:/usr/share/fscrawler/config-mount/docker-compose
+  # fscrawler service for indexing a folder
+  # Also check `fscrawlerrest` service for REST access
+  fscrawler:
+    build:
+      # ubuntu as base image
+      context: ${PWD}
+      # alpine linux as base image
+      # context: ${PWD}/alpine
+    volumes:
+    - ${PWD}/test/data/:/usr/share/fscrawler/data/:ro
+    - ${PWD}/config/docker-compose:/usr/share/fscrawler/config-mount/docker-compose
 
-  #   # Despite the python tester having a built-in healthcheck at tests/es_acceptance.py#wait_for_cluster_health
-  #   # Using the dockerfile healthcheck extends this to other services without having to re-code a wait for health status in each
-  #   # Note that this requires docker-compose.yml version 2.1, docker-compose>=1.11, docker>=1.13 
-  #   depends_on:
-  #     # Should be es_init here, but not sure why fscrawler fails to detect it has executed
-  #     # This "depends_on.condition" syntax is deprecated anyway, so not thinking it through
-  #     # es_init:
-  #     elasticsearch1:
-  #       condition: service_healthy
-  #   command:
-  #     - --trace
-  #     - --config_dir
-  #     - /usr/share/fscrawler/config
-  #     - docker-compose
+    # Despite the python tester having a built-in healthcheck at tests/es_acceptance.py#wait_for_cluster_health
+    # Using the dockerfile healthcheck extends this to other services without having to re-code a wait for health status in each
+    # Note that this requires docker-compose.yml version 2.1, docker-compose>=1.11, docker>=1.13 
+    depends_on:
+      # Should be es_init here, but not sure why fscrawler fails to detect it has executed
+      # This "depends_on.condition" syntax is deprecated anyway, so not thinking it through
+      # es_init:
+      elasticsearch1:
+        condition: service_healthy
+    command:
+      - --trace
+      - --config_dir
+      - /usr/share/fscrawler/config
+      - docker-compose
 
   elasticsearch1:
     build:
+      # build a dockerfile on top of the official elasticsearch docker image hosted at docker.elastic.co
+      # It includes healthcheck
+      # Check build/elasticsearch/Dockerfile for more details
       context: ${PWD}/build/elasticsearch
 
   # service that serves .travis.yml to make curl calls to elasticsearch1 and fscrawler

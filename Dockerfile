@@ -31,10 +31,14 @@ WORKDIR /runtime/fscrawler-$FS_BRANCH
 
 # Modified original from here on
 # Copied from Dockerfile
+# usually same as FSCRAWLER_BRANCH
 # ENV FSCRAWLER_VERSION=2.5-SNAPSHOT
 ENV FSCRAWLER_VERSION=2.5
+# ENV FSCRAWLER_VERSION=2.6-SNAPSHOT
+
+# build
 # RUN mvn clean install -X -DskipTests # > /dev/null
-RUN mvn clean package -DskipTests # > /dev/null
+RUN mvn clean package -DskipTests > /dev/null
 
 # FSCRAWLER_VERSION is same as FS_BRANCH
 RUN mkdir /usr/share/fscrawler
@@ -51,8 +55,6 @@ RUN addgroup --system fscrawler && adduser --system --ingroup fscrawler fscrawle
 RUN apt-get update && apt-get install -y gosu bash openssl
 
 # Now cp and unzip the generated zip file from the maven build above
-# usually same as FSCRAWLER_BRANCH
-ENV FSCRAWLER_VERSION=2.5
 RUN cp /runtime/fscrawler-$FS_BRANCH/distribution/target/fscrawler-$FSCRAWLER_VERSION.zip ./fscrawler.zip
 
 

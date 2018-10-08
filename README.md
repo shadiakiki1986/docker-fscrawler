@@ -40,7 +40,7 @@ where
   * make sure to use the proper URL reference in the config file to point to the elasticsearch instance
     * e.g. `localhost:9200` if elasticsearch is running locally
 * if the config folder is not mounted from the host, the docker container will have an empty `config` folder, thus prompting the user for confirmation `Y/N` of creating the first project file
-* *CLI options* are documented [here](https://github.com/dadoonet/fscrawler#cli-options)
+* *CLI options* are documented [here](https://fscrawler.readthedocs.io/en/latest/admin/cli-options.html#cli-options)
 
 
 An example set of `CLI options` is to run fscrawler in REST API mode:
@@ -57,6 +57,14 @@ docker run \
 ### with docker-compose (file 1)
 
 Given you already have good docker-compose-fu skills, check `docker-compose.yml`.
+
+To use
+
+```
+docker-compose pull
+docker-compose build
+docker-compose up
+```
 
 
 ### with docker-compose (file 2)
@@ -246,6 +254,13 @@ To update `elasticsearch` in the `docker-compose` for the purpose of testing (e.
 
 
 ## Changelog
+
+Version 2.5.2 (2018-10-08)
+- docker-compose.yml updates
+  - update base elasticsearch image to be `6.4` from 6.1
+  - bring back the file crawl service
+  - elasticsearch healthcheck to target green now that 6.4 shows green instead of yellow even if 1 node
+
 
 Version 2.5.1 (2018-10-08)
 - using fscrawler 2.5
