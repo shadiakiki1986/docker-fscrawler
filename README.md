@@ -9,13 +9,9 @@ Supported tags
 - `2.2` with fscrawler version 2.2 and alpine 3.5
 - `2.4` with fscrawler 2.4 and alpine 3.5
 - `2.5` with fscrawler 2.5 and ubuntu 16.04
+- `2.7-SNAPSHOT-v20201204-es7`
 
-Dockerfile includes [tesseract](https://github.com/tesseract-ocr/tesseract/wiki) (via ubuntu 16.04 or via [alpine 3.5](https://pkgs.alpinelinux.org/packages?name=tesseract-ocr&branch=&repo=&arch=&maintainer=))
-
-PS: The Ubuntu image was added because the alpine image was giving an error upon `mvn clean install`
-It said that `initial heap size larger than max heap size` and I couldn't figure it out.
-The alpine image was 308 MB, whereas the ubuntu image is 1.2 GB (but also includes tesseract-fra).
-Probably a good idea to get the alpine image to work.
+Dockerfile includes [tesseract](https://github.com/tesseract-ocr/tesseract/wiki) (via ubuntu 20.04)
 
 
 ## Usage Instructions
@@ -82,8 +78,8 @@ running `sudo sysctl -p`, or whatever other means is convenient to you. This is 
 
 Download the following files from this git repository. Cloning the whole repository is _not_ necessary.
 
-`docker-compose-deployment.yml`   
-`build/elasticsearch/docker-healthcheck`
+- `docker-compose.yml` (single-node) or `docker-compose-deployment.yml` (multi-node)
+- `build/elasticsearch/docker-healthcheck`
  
 Make a new empty folder and put these two files in it. This directory will be the home of your configurations, and the 
 location from which you can control your containers and make changes.
