@@ -2,6 +2,11 @@
 # sticking wtih 2.1 for the "condition" in "depends_on"
 # It was deprecated in version 3
 # Check https://docs.docker.com/compose/startup-order/
+# 
+# Update 2020-12-04: could check
+# - https://github.com/elastic/elasticsearch/blob/master/distribution/docker/docker-compose.yml
+# - https://github.com/dadoonet/fscrawler/blob/master/contrib/docker-compose-example/docker-compose.yml
+
 version: '2.1'
 
 services:
@@ -39,6 +44,11 @@ services:
       # It includes healthcheck
       # Check build/elasticsearch/Dockerfile for more details
       context: ${PWD}/build/elasticsearch
+
+    # https://github.com/elastic/elasticsearch/blob/master/distribution/docker/docker-compose.yml#L6
+    # https://stackoverflow.com/a/61547317/4126114
+    environment:
+      - discovery.type=single-node
 
   # service that serves .travis.yml to make curl calls to elasticsearch1 and fscrawler
   tester:

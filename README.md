@@ -61,6 +61,7 @@ Given you already have good docker-compose-fu skills, check `docker-compose.yml`
 To use
 
 ```
+echo "vm.max_map_count=262144"| sudo tee -a /etc/sysctl.conf
 docker-compose pull
 docker-compose build
 docker-compose up
@@ -238,11 +239,14 @@ To test against elasticsearch locally, follow steps in `.travis.yml`
 ## Updating
 
 To update `fscrawler` in this docker container:
-- update the version number used in `Dockerfile`
-  - also update the URL to the maven zip file to download
-- try to build, e.g. `docker build -t shadiakiki1986/fscrawler:2.4 .`
-- try to run
-- commit, tag, push
+
+- install docker (instructions for linux: [link](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script))
+- install docker-compose (instructions for linux: [link](https://docs.docker.com/compose/install/))
+- update the version numbers used in `Dockerfile`
+  - (deprecated) also update the URL to the maven zip file to download
+- test can build, e.g. `docker build -t shadiakiki1986/fscrawler:es7-2.7-SNAPSHOT-20201204 .`
+- test can run (check section above "Usage / with docker-compose (file 1)")
+- commit, tag, push to github
 
 To update the automated build on hub.docker.com
 - the "latest" tag will get re-built automatically with the `push` above

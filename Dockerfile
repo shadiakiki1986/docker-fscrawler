@@ -1,15 +1,10 @@
 # Copied from https://github.com/dadoonet/fscrawler/issues/314#issuecomment-282823207
 # with modifications
 
-FROM ubuntu:16.04
+# 2020-12-04: For 2.7-SNAPSHOT, upgraded from 16.04 to 20.04, and openjdk-8-jdk to openjdk-14-jdk
+FROM ubuntu:20.04
 
-# split each package to a separate line just for bandwidth purposes while running in FFA
-RUN apt-get update && apt-get install -y openjdk-8-jdk
-RUN apt-get update && apt-get install -y wget
-RUN apt-get update && apt-get install -y unzip
-RUN apt-get update && apt-get install -y maven
-RUN apt-get update && apt-get install -y tesseract-ocr
-RUN apt-get update && apt-get install -y tesseract-ocr-fra
+RUN apt-get update && apt-get install -y openjdk-14-jdk wget unzip maven tesseract-ocr tesseract-ocr-fra
 
 RUN update-ca-certificates -f
 
@@ -31,14 +26,15 @@ WORKDIR /runtime/fscrawler-$FS_BRANCH
 
 # Modified original from here on
 # Copied from Dockerfile
-# usually same as FSCRAWLER_BRANCH
+# usually same as FS_BRANCH, except *-SNAPSHOT that map to FS_BRANCH=master
 # ENV FSCRAWLER_VERSION=2.5-SNAPSHOT
 # ENV FSCRAWLER_VERSION=2.5
-ENV FSCRAWLER_VERSION=2.6-SNAPSHOT
+#ENV FSCRAWLER_VERSION=2.6-SNAPSHOT
+ENV FSCRAWLER_VERSION=2.7-SNAPSHOT
 
 # build
 # RUN mvn clean install -X -DskipTests # > /dev/null
-RUN mvn clean package -DskipTests > /dev/null
+RUN mvn clean package -DskipTests # > /dev/null
 
 # FSCRAWLER_VERSION is same as FS_BRANCH
 RUN mkdir /usr/share/fscrawler
@@ -54,8 +50,12 @@ RUN addgroup --system fscrawler && adduser --system --ingroup fscrawler fscrawle
 # and bash for "bin/fscrawler" among others
 RUN apt-get update && apt-get install -y gosu bash openssl
 
+# choose elasticsearch version to support, 2.7-SNAPSHOT supports both es6 and es7
+ENV ES_VERSION=es7
+
 # Now cp and unzip the generated zip file from the maven build above
-RUN cp /runtime/fscrawler-$FS_BRANCH/distribution/target/fscrawler-$FSCRAWLER_VERSION.zip ./fscrawler.zip
+#RUN ls /runtime/fscrawler-$FS_BRANCH/distribution/es7/target/
+RUN cp /runtime/fscrawler-$FS_BRANCH/distribution/$ES_VERSION/target/fscrawler-$ES_VERSION-$FSCRAWLER_VERSION.zip ./fscrawler.zip
 
 
 # Remove logs path from below as it was just copy-pasted from elasticsearch
@@ -75,8 +75,9 @@ RUN set -ex; \
 
 # shopt from https://unix.stackexchange.com/a/6397/312018
 # RUN /bin/bash -c "shopt -s dotglob nullglob; mv /runtime/fscrawler-$FSCRAWLER_VERSION/* .; ls -al /runtime/fscrawler-$FSCRAWLER_VERSION; rmdir /runtime/fscrawler-$FSCRAWLER_VERSION;"
-RUN mv fscrawler-$FSCRAWLER_VERSION/* .; \
-  rmdir fscrawler-$FSCRAWLER_VERSION;
+
+RUN mv fscrawler-$ES_VERSION-$FSCRAWLER_VERSION/* .; \
+  rmdir fscrawler-$ES_VERSION-$FSCRAWLER_VERSION;
 
 #RUN chown -R fscrawler:fscrawler .
 #USER fscrawler
