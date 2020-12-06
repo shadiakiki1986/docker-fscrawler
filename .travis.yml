@@ -19,13 +19,13 @@ before_install:
 install:
 - docker-compose up --build -d
 - echo "Sleeping while ES boots up, Tike font cache is built, and fscrawler runs" && sleep 60
-- ( docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 1" && sleep 60 )
-- ( docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 2" && sleep 60 )
-- ( docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 3" && sleep 60 )
-- ( docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 4" && sleep 60 )
-- ( docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 5" && sleep 60 )
-- ( docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 6" && sleep 60 )
-- ( docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 7" && sleep 60 )
+- ( docker-compose logs --tail 10 fscrawler | grep DEBUG | tail -n1 | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 1" && sleep 60 )
+- ( docker-compose logs --tail 10 fscrawler | grep DEBUG | tail -n1 | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 2" && sleep 60 )
+- ( docker-compose logs --tail 10 fscrawler | grep DEBUG | tail -n1 | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 3" && sleep 60 )
+- ( docker-compose logs --tail 10 fscrawler | grep DEBUG | tail -n1 | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 4" && sleep 60 )
+- ( docker-compose logs --tail 10 fscrawler | grep DEBUG | tail -n1 | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 5" && sleep 60 )
+- ( docker-compose logs --tail 10 fscrawler | grep DEBUG | tail -n1 | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 6" && sleep 60 )
+- ( docker-compose logs --tail 10 fscrawler | grep DEBUG | tail -n1 | grep -q "Fs crawler is going to sleep" ) || ( echo "need to sleep more 7" && sleep 60 )
 
 script:
 # In below, note 'jq' usage below to pretty-print
@@ -35,13 +35,11 @@ script:
 # 1st test for log message
 # https://stackoverflow.com/a/27726913/4126114
 # 2nd test for existence of status file
-- docker-compose logs --tail 1 fscrawler | grep -q "Fs crawler is going to sleep"
-- docker-compose
-    exec fscrawler
-    ls /usr/share/fscrawler/config/docker-compose/_status.json
+- docker-compose logs --tail 10 fscrawler | grep DEBUG | tail -n1 | grep -q "Fs crawler is going to sleep"
+- docker-compose exec fscrawler ls /usr/share/fscrawler/config/docker-compose/_status.json
 
 # Test that tesseract works
-- docker-compose exec fscrawler tesseract -psm 3 /usr/share/fscrawler/data/image012.jpg /home/fscrawler/image012
+- docker-compose exec fscrawler tesseract --psm 3 /usr/share/fscrawler/data/image012.jpg /home/fscrawler/image012
 - docker-compose exec fscrawler cat /home/fscrawler/image012.txt
 - docker-compose exec fscrawler grep ABCDE /home/fscrawler/image012.txt
 

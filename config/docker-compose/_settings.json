@@ -6,7 +6,7 @@
   },
   "elasticsearch" : {
     "nodes" : [
-      { "host" : "elasticsearch1", "port" : 9200, "scheme" : "HTTP" }
+      { "url" : "http://elasticsearch1:9200" }
     ],
     "index" : "docker-compose",
     "pipeline": "example_pipeline",

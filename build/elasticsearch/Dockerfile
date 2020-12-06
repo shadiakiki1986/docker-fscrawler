@@ -11,8 +11,15 @@
 # FROM docker.elastic.co/elasticsearch/elasticsearch:5.1.2
 # FROM docker.elastic.co/elasticsearch/elasticsearch-alpine-base:latest
 # FROM docker.elastic.co/elasticsearch/elasticsearch:6.1.1
-# FROM docker.elastic.co/elasticsearch/elasticsearch:6.4.0
-FROM docker.elastic.co/elasticsearch/elasticsearch:7.9.3-amd64
+
+# tested with 2.6-SNAPSHOT in 2018 and 2.6
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.4.0
+
+# Testing with 2.6 and 2.7-SNAPSHOT (2020-12-04)
+# FROM docker.elastic.co/elasticsearch/elasticsearch:6.8.9
+# FROM docker.elastic.co/elasticsearch/elasticsearch:7.9.3-amd64
+
+#-----------------
 
 # Healthcheck. Copied from
 # https://github.com/docker-library/healthcheck/blob/master/elasticsearch/Dockerfile

@@ -6,10 +6,14 @@ Published on docker hub [here](https://hub.docker.com/r/shadiakiki1986/fscrawler
 Mostly inspired by elasticsearch's alpine [dockerfile](https://github.com/docker-library/elasticsearch/blob/f2e19796b765e2e448d0e8c651d51be992b56d08/5/alpine/Dockerfile)
 
 Supported tags
+
 - `2.2` with fscrawler version 2.2 and alpine 3.5
 - `2.4` with fscrawler 2.4 and alpine 3.5
 - `2.5` with fscrawler 2.5 and ubuntu 16.04
-- `2.7-SNAPSHOT-v20201204-es7`
+- `2.6` with fscrawler 2.6 and ubuntu 20.04
+  - Note: the binary name `fscrawler-es5` is compatible with elasticsearch version 5, versus `fscrawler` and `fscrawler-es6` with version 6
+- (WIP) `2.7-SNAPSHOT-v20201204`
+  - Note: the binary name `fscrawler-es6` is compatible with elasticsearch version 6, versus `fscrawler` and `fscrawler-es7` with version 7
 
 Dockerfile includes [tesseract](https://github.com/tesseract-ocr/tesseract/wiki) (via ubuntu 20.04)
 
@@ -240,8 +244,11 @@ To update `fscrawler` in this docker container:
 - install docker-compose (instructions for linux: [link](https://docs.docker.com/compose/install/))
 - update the version numbers used in `Dockerfile`
   - (deprecated) also update the URL to the maven zip file to download
-- test can build, e.g. `docker build -t shadiakiki1986/fscrawler:es7-2.7-SNAPSHOT-20201204 .`
-- test can run (check section above "Usage / with docker-compose (file 1)")
+- test can build
+  - `docker build -t shadiakiki1986/fscrawler:2.6 .`
+  - `docker build -t shadiakiki1986/fscrawler:2.7-SNAPSHOT-20201204 .`
+
+- test can run (check section above "Usage / with docker-compose (file 1)", or run tests in `.travis.yml` file)
 - commit, tag, push to github
 
 To update the automated build on hub.docker.com
@@ -254,6 +261,13 @@ To update `elasticsearch` in the `docker-compose` for the purpose of testing (e.
 
 
 ## Changelog
+
+Version 2.6 (2020-12-04)
+
+- update fscrawler from 2.6-SNAPSHOT to 2.6
+- update ubuntu base image from 16.04 to 20.04, etc
+- support `fscrawler{,-es5,-es6}`
+
 
 Version 2.6-SNAPSHOT (2018-10-08)
 - update fscrawler from 2.5 to `2.6-SNAPSHOT` (master branch as of today)
