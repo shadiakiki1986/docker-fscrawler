@@ -8,9 +8,12 @@
 # Note that the alpine image isn't published there
 # Also note that there seem to be "flavors" to 6.1.1 for example with/without xpack
 # More details at https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+# Update 2020-12-07 Upgrade to 6.5.2 due to _docs (https://github.com/danielberkompas/elasticsearch-elixir/issues/52)
 # FROM docker.elastic.co/elasticsearch/elasticsearch:5.1.2
 # FROM docker.elastic.co/elasticsearch/elasticsearch-alpine-base:latest
-FROM docker.elastic.co/elasticsearch/elasticsearch:6.1.1
+#FROM docker.elastic.co/elasticsearch/elasticsearch:6.1.1
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.5.2
+
 
 
 # Healthcheck. Copied from
@@ -20,5 +23,6 @@ FROM docker.elastic.co/elasticsearch/elasticsearch:6.1.1
 # Reference: https://docs.docker.com/engine/reference/builder/#/healthcheck 
 #
 # TODO How to detect that 2 nodes are running and wait for "green"?
+# Update 2020-12-07 after upgrade to 6.5.2, this is giving green again instead of yellow, so updating script for either one of green or yellow
 COPY docker-healthcheck /usr/local/bin/
-HEALTHCHECK CMD ["/bin/bash","docker-healthcheck","yellow"] 
+HEALTHCHECK CMD ["/bin/bash","docker-healthcheck"]

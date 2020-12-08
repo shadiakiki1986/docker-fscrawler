@@ -1,12 +1,9 @@
 #!/bin/bash
 # Copied from https://github.com/docker-library/healthcheck/tree/master/elasticsearch/docker-healthcheck
-# Usage: docker-healthcheck  # by default, waits for "green"
-#        docker-healthcheck yellow # to wait for "yellow" instead
+# Usage: docker-healthcheck  # waits for "green" or "yellow"
 
-target='green'
-if [ ! -z "$1" ]; then
-  target="$1"
-fi
+target_g='green'
+target_y='yellow'
 
 set -eo pipefail
 
@@ -22,10 +19,13 @@ host="$(hostname -i || echo '127.0.0.1')"
 # TODO with xpack, the below curl will fail with "unauthorized" error if xpack is enabled 
 if health="$(curl -fsSL "http://$host:9200/_cat/health?h=status")"; then
   health="$(echo "$health" | sed -r 's/^[[:space:]]+|[[:space:]]+$//g')" # trim whitespace (otherwise we'll have "green ")
-  if [ "$health" = "$target" ]; then
+  if [ "$health" = "$target_g" ]; then
     exit 0
   fi
-  echo >&2 "unexpected health status: $health"
+  if [ "$health" = "$target_y" ]; then
+    exit 0
+  fi
+  echo >&2 "unexpected health status: '$health'"
 fi
 
 exit 1
